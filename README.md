@@ -26,3 +26,9 @@ The REST API is a GET method request, it does not accept payload, and will respo
 - https://expressjs.com/en/4x/api.html#router.METHOD
 - https://blog.logrocket.com/organizing-express-js-project-structure-better-productivity/
 - https://www.youtube.com/watch?v=iM_S4RczozU
+- https://stackoverflow.com/questions/5951552/basic-http-authentication-in-node-js
+- https://stackoverflow.com/questions/24000580/how-does-req-headers-authorization-get-set
+
+
+
+

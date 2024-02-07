@@ -1,5 +1,5 @@
 {
-  "name": "finance_mgt_app",
+  "name": "webapp",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -8,6 +8,7 @@
   },
   "private": true,
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "node": "^21.6.1",
