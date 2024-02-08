@@ -6,8 +6,6 @@
 // PUT /v1/user/self
 // ---------------------------------------------------------
 
-//delete database and automatically bootstrap new created database
-//Launch Centos 8 VM on Digital Ocean (or AWS or GCP).Download code submission from Canvas and SCP the zip file to the VM.
 
 
 
