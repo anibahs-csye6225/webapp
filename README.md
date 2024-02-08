@@ -14,7 +14,7 @@ The REST API is a GET method request, it does not accept payload, and will respo
 
 ## Technology:
 - Node.js
-- Dependencies - Sequelize, Express, dotenv, pg 
+- Dependencies - Sequelize, Express, dotenv, pg , bcrypt, email-validator
 - Postgres 16
 - PgAdmin
 

@@ -11,11 +11,5 @@ module.exports = {
         database: process.env.database,
         dialect: process.env.dialect,
         port: process.env.port
-        // pool: {
-        //     max: 5,
-        //     min: 0,
-        //     acquire: 30000,
-        //     idle: 10000
-        // }
     }
 };

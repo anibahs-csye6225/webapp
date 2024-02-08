@@ -1,6 +1,6 @@
 // app.js - entry point
 const express = require('express');
-const db = require('./database.js')
+//const db = require('./database.js')
 const hc_router = require('./src/routes/healthcheck.router.js');
 const auth_router = require('./src/routes/auth.router.js');
 
