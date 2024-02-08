@@ -1,4 +1,4 @@
-# Finance Management 
+# Webapp
 
 
 The aim of this exercise is to perform a health check on a dummy web application called finance management. 
@@ -10,7 +10,9 @@ The REST API is a GET method request, it does not accept payload, and will respo
 - If it receives payload with the call, it returns 400 Bad Request HTTP status code.
 - If it receives other method calls, it will return 405 Method Not Allowed HTTP status code.
 - If it receives calls to unrecognized endpoints, it will return 404 Not Found HTTP status code.
-
+- POST /v1/user with JSON payload should create user
+- GET /v1/user/self should return user details based on authorization header 
+- PUT /v1/user/self should update user details
 
 ## Technology:
 - Node.js
