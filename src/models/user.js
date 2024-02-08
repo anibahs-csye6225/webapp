@@ -1,7 +1,6 @@
 // models/users.js
 
-const Sequelize = require('sequelize');
-const { DataTypes } = require('sequelize');
+const { Sequelize, DataTypes,  } = require('sequelize');
 const bcrypt = require('bcrypt');
 const db = require('./../../database');
 
@@ -9,12 +8,19 @@ const db = require('./../../database');
 // Define user model as per database
 
 const User= db.define('User', {
+
     id: {
         type: DataTypes.UUID,
         allowNull: false,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         noUpdate: true,
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        noUpdate: true,
+        unique: true,
     },
     first_name: {
         type: DataTypes.STRING,
@@ -28,24 +34,19 @@ const User= db.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    username: {
-        type: DataTypes.STRING,
+    account_created: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
         allowNull: false,
-        noUpdate: true,
-        unique: true,
     },
     account_updated: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         allowNull: false,
     },
-    account_created: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false,
-    },
 }, {
-    timestamps: false
+    timestamps: false,
+    schema: 'public'
 });
 
 

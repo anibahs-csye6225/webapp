@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f495885-7ce7-4caa-b6fa-e486d86cfc88" name="Changes" comment="" />
+    <list default="true" id="2f495885-7ce7-4caa-b6fa-e486d86cfc88" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth.router.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth.router.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,7 +58,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "assignment2",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/shabinasingh/Downloads/Academics/NetworkStructures/WS/webapp",
     "node.js.detected.package.eslint": "true",
@@ -254,7 +261,8 @@
       <workItem from="1706460568119" duration="85987000" />
       <workItem from="1706724617171" duration="1236000" />
       <workItem from="1706744708213" duration="2782000" />
-      <workItem from="1707186178913" duration="19510000" />
+      <workItem from="1707186178913" duration="29203000" />
+      <workItem from="1707347358720" duration="8550000" />
     </task>
     <servers />
   </component>
