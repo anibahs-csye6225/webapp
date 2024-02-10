@@ -1,4 +1,4 @@
-# Webapp
+# Webap
 
 
 The aim of this exercise is to perform a health check on a dummy web application called finance management. 
