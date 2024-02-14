@@ -6,6 +6,7 @@ const pg  = require('pg');
 const env = process.env.NODE_ENV || 'development';
 //console.log('Environment: ', env)
 //console.log('Loaded environment variables:', process.env);
+//console.log('Loaded environment variables:', envConfig[env]);
 const sequelize = new Sequelize(
     process.env.DATABASE,
     process.env.USERNAME,
@@ -16,4 +17,3 @@ const sequelize = new Sequelize(
     });
 
 module.exports = sequelize;
-
