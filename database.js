@@ -5,7 +5,8 @@ const pg  = require('pg');
 const envConfig = require('./src/configs/config.js');
 
 const env = process.env.NODE_ENV || 'development';
-console.log('Loaded environment variables:', envConfig[env]);
+//console.log('Environment: ', env)
+//console.log('Loaded environment variables:', envConfig[env]);
 const sequelize = new Sequelize(
     envConfig[env].database,
     envConfig[env].username,

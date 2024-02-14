@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f495885-7ce7-4caa-b6fa-e486d86cfc88" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth.router.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth.router.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +43,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Mocha.Healthz API.executor": "Run",
+    "Node.js.apitest.js.executor": "Run",
     "Node.js.app.js.executor": "Run",
     "Node.js.config.js.executor": "Run",
     "Node.js.database.js.executor": "Run",
@@ -58,14 +55,14 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "assignment2",
+    "git-widget-placeholder": "assignment3",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/shabinasingh/Downloads/Academics/NetworkStructures/WS/webapp",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs.mocha.mocha_node_package_dir": "/Users/shabinasingh/Downloads/Academics/NetworkStructures/WS/finance_mgt_app/node_modules/mocha",
+    "nodejs.mocha.mocha_node_package_dir": "/Users/shabinasingh/Downloads/Academics/NetworkStructures/WS/webapp/node_modules/mocha",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "editor.preferences.folding",
     "vue.rearranger.settings.migration": "true"
@@ -81,12 +78,13 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/" />
       <recent name="$PROJECT_DIR$/src/models" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/routes" />
     </key>
   </component>
-  <component name="RunManager" selected="Mocha.Healthz API">
+  <component name="RunManager" selected="Node.js.api.test.js">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="finance_management" />
       <option name="ENV_FILES" value="" />
@@ -120,6 +118,9 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="api.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/__tests__/api.test.js" working-dir="$PROJECT_DIR$/src/__tests__">
+      <method v="2" />
     </configuration>
     <configuration name="healthcheck.router.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/routes/healthcheck.router.js" working-dir="$PROJECT_DIR$/src/routes">
       <method v="2" />
@@ -244,6 +245,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.api.test.js" />
         <item itemvalue="Mocha.Healthz API" />
         <item itemvalue="Node.js.healthcheck.test.js" />
         <item itemvalue="Node.js.healthcheck.router.js" />
@@ -263,6 +265,8 @@
       <workItem from="1706744708213" duration="2782000" />
       <workItem from="1707186178913" duration="29203000" />
       <workItem from="1707347358720" duration="8921000" />
+      <workItem from="1707795502536" duration="1859000" />
+      <workItem from="1707852401233" duration="28716000" />
     </task>
     <servers />
   </component>
