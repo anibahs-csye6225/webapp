@@ -50,12 +50,6 @@ const User= db.define('User', {
 });
 
 
-db.sync()
-    .then((value) => {
-        console.log("Database connection established!");
-    })
-    .catch((err) => {
-        console.error("Database connection Failed: ", err);
-    })
+
 
 module.exports = User;

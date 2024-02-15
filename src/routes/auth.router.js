@@ -41,11 +41,12 @@ router.get('/self', async (req, res, next) => {
                     var selfUser = value
                     bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
                         if (err) {
-                            console.log('ERROR: Unauthorized',err)
+                            console.error('ERROR: Unauthorized',err)
                             res.status(401).end();
                         } else if (value) {
                             var userValue = value.dataValues
                             delete userValue['password'];
+                            console.log("GET returns Body: ",JSON.stringify(userValue, null, 2))
                             res.status(200).end(JSON.stringify(userValue, null, 2));
                         }
                     });
