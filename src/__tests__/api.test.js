@@ -3,13 +3,10 @@ const request = require('supertest');
 const app = require('./../../app.js');
 
 
-const un = "singh.shabina@northeastern.edu";
+const un = "jane.doe@gmail.com";
 const pd = "JaneDoe123";
 const fn = "Jane";
 const ln = "Doe"
-
-
-
 
 
 describe('v1/user API', () => {
@@ -35,12 +32,20 @@ describe('v1/user API', () => {
         "username": un
     };
     beforeAll(() => {
-        server = app.listen(3000);
+        const PORT = process.env.PORT || 3000;
+        server = app.listen(PORT);
     });
     afterAll((done) => {
         server.close(done);
     });
 
+
+    //Test 0 - Test database connection
+    test('test database connection', async () => {
+        const createUserRes = await request(app)
+            .get('/healthz');
+        expect(createUserRes.statusCode).toEqual(200);
+    });
 
     //Test 1 - Create an account, and using the GET call, validate account exists.
     test('return user details on GET request after user creation', async () => {
