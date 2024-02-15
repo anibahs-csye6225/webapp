@@ -1,4 +1,5 @@
-# Webap
+# Webapp
+
 
 
 The aim of this exercise is to perform a health check on a dummy web application called finance management. 
@@ -16,7 +17,7 @@ The REST API is a GET method request, it does not accept payload, and will respo
 
 ## Technology:
 - Node.js
-- Dependencies - Sequelize, Express, dotenv, pg , bcrypt, email-validator
+- Dependencies - Sequelize, Express, dotenv, pg, bcrypt, email-validator, jest, supertest
 - Postgres 16
 - PgAdmin
 
