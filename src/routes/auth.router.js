@@ -72,7 +72,7 @@ router.put('/self', async (req, res, next) => {
         if((req.body.account_created && Object.keys(req.body.account_created).length>0) ||
                 (req.body.account_updated && Object.keys(req.body.account_updated).length>0) ||
                     (req.body.username && Object.keys(req.body.username).length>0)){
-            console.error("ERROR: Cannot update date");
+            console.error("ERROR: Unwanted payload");
             return res.status(400).end();
         }
         var auth = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
@@ -137,7 +137,7 @@ router.use('/self', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     if (Object.keys(req.body).length > 0 || Object.keys(req.query).length > 0 || Object.keys(req.params).length > 0) {
         const data = req.body
-        if(validator.validate(data.username)) {
+        if(validator.validate(data.username) && data.password && Object.keys(req.body.password).length>0) {
             User.create({
                 username: data.username, password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(8)),
                 first_name: data.first_name, last_name: data.last_name
@@ -152,7 +152,7 @@ router.post('/', async (req, res, next) => {
                 });
         }else{
             // Payload not found, respond with 400 Bad Request
-            console.error('ERROR: Bad Email address')
+            console.error('ERROR: Bad Email address/password')
             res.status(400).end();
         }
     } else {
