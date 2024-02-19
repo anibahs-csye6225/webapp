@@ -53,7 +53,7 @@ describe('v1/user API', () => {
             .post('/v1/user')
             .auth(un, pd)
             .send(payload);
-        expect(createUserRes.statusCode).toEqual(201);
+        expect(createUserRes.statusCode).toEqual(200);
 
         const getCreatedRes = await request(app)
             .get('/v1/user/self')
@@ -85,7 +85,7 @@ describe('v1/user API', () => {
             .auth(un, pd);
 
 
-        expect(getUpdatedRes.statusCode).toEqual(200);
+        expect(getUpdatedRes.statusCode).toEqual(201);
         let newUserDetails = JSON.parse(getUpdatedRes.text);
         delete newUserDetails.account_created;
         delete newUserDetails.account_updated;
