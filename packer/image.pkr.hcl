@@ -27,15 +27,40 @@ build {
     name = "custom-image"
   }
 
+  provisioner "shell" {
+    scripts = [
+      "db_init.sh"
+    ]
+  }
+
+
+  # webapp.zip is needed to run cp_app.sh
+  #-------------------------------------# 
   provisioner "file" {
     source      = "./../../webapp.zip"
     destination = "/tmp/webapp.zip"
   }
+  #-------------------------------------# 
   provisioner "shell" {
     scripts = [
-      "setup_db.sh"#, "cp_app.sh"
+      "env_init.sh"
     ]
   }
+  #-------------------------------------# 
+
+
+  provisioner "shell" {
+    scripts = [
+      "setup_service.sh"
+    ]
+  }
+
+
+
+
+
+
+
 }
   
 
