@@ -27,10 +27,10 @@ build {
     name = "custom-image"
   }
 
-  provisioner "file" {
-    source      = "./../.env"
-    destination = "/tmp/.env"
-  }
+  # provisioner "file" {
+  #   source      = "./../.env"
+  #   destination = "/tmp/.env"
+  # }
 
   provisioner "shell" {
     scripts = [
