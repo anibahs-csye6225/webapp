@@ -31,14 +31,15 @@ echo "Unzipped webapp artifact"
 echo "Add user csye6225 for webapp"
 sudo adduser -U csye6225 --system
 
-ls /opt
+ls -lart /opt
 if [ -d "$INSTALL_DIR" ]; then
     echo "Start setting up application"
     cd "$INSTALL_DIR" || exit 1
+    sudo chmod -R 755 webapp
     echo "PWD: " 
     pwd
     sudo dnf module install -y nodejs:20
     sudo dnf module install -y nodejs:20/common
     sudo dnf install -y npm
 fi
-echo "We have succeeded!"
+echo "We have installed the dependencies!"

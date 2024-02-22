@@ -15,4 +15,4 @@ sudo tail "$PG_CONFIG"
 sudo systemctl stop postgresql
 sudo systemctl start postgresql
 
-sudo systemctl status postgresql
+sudo systemctl status postgresql --no-pager
