@@ -38,8 +38,8 @@ build {
     ]
   }
 
-  provisioner "file" {
-    sourced      = "./../../webapp.zip"
+  provisioner "file" 
+    source      = "./../../webapp.zip"
     destination = "/tmp/webapp.zip"
   }
   #-------------------------------------# 
