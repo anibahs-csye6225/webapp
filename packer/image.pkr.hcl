@@ -27,6 +27,11 @@ build {
     name = "custom-image"
   }
 
+  provisioner "file" {
+    source      = "./../.env"
+    destination = "/tmp/.env"
+  }
+
   provisioner "shell" {
     scripts = [
       "db_init.sh"
