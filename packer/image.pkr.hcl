@@ -27,20 +27,12 @@ build {
     name = "custom-image"
   }
 
-  # provisioner "file" {
-  #   source      = "./../.env"
-  #   destination = "/tmp/.env"
-  # }
-
   provisioner "shell" {
     scripts = [
       "db_init.sh"
     ]
   }
 
-
-  # webapp.zip is needed to run cp_app.sh
-  #-------------------------------------# 
   provisioner "file" {
     source      = "./../../webapp.zip"
     destination = "/tmp/webapp.zip"
@@ -63,10 +55,6 @@ build {
 
 
 
-
-
-
-}
   
 
 

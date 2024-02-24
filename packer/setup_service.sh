@@ -3,6 +3,7 @@
 INSTALL_DIR="/opt/webapp"
 SYSTEMD_DIR="/etc/systemd/system/"
 
+
 echo "check npm installation"
 which npm
 
