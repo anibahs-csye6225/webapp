@@ -38,6 +38,9 @@ build {
     ]
   }
 
+
+  # webapp.zip is needed to run cp_app.sh
+  #-------------------------------------# 
   provisioner "file" {
     source      = "./../../webapp.zip"
     destination = "/tmp/webapp.zip"
@@ -56,6 +59,9 @@ build {
       "setup_service.sh"
     ]
   }
+
+
+
 
 
 
