@@ -29,4 +29,5 @@ sudo systemctl enable csye6225
 sudo systemctl start csye6225
 sudo systemctl status csye6225 --no-pager
 
-pgrep -f "webapp.service" > /dev/null
+sudo pgrep -f "webapp.service" > /dev/null
+#exit 1
