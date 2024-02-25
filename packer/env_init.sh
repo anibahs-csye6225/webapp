@@ -35,7 +35,7 @@ ls -lart /opt
 if [ -d "$INSTALL_DIR" ]; then
     echo "Start setting up application"
     cd "$INSTALL_DIR" || exit 1
-    sudo chmod -R 755 webapp
+    sudo chmod -R 755 ./../webapp
     echo "PWD: " 
     pwd
     sudo dnf module install -y nodejs:20
