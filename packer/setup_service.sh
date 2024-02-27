@@ -3,11 +3,12 @@
 INSTALL_DIR="/opt/webapp"
 SYSTEMD_DIR="/etc/systemd/system/"
 
-echo "check npm installation"
-which npm
+# check in service
+# echo "check npm installation"
+# which npm
 
-echo "check postgres service"
-sudo systemctl status postgresql --no-pager
+# echo "check postgres service"
+# sudo systemctl status postgresql --no-pager
 
 echo "Start csye6225.service"
 ls -lart /opt

@@ -21,11 +21,12 @@ build {
     name = "custom-image"
   }
 
-  provisioner "shell" {
-    scripts = [
-      "db_init.sh"
-    ]
-  }
+  # move db setup to CLoud SQL 
+  # provisioner "shell" {
+  #   scripts = [
+  #     "db_init.sh"
+  #   ]
+  # }
 
 
   # webapp.zip is needed to run cp_app.sh
