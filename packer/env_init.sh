@@ -29,7 +29,7 @@ echo "Unzipped webapp artifact"
 
 #create user for application
 echo "Add user csye6225 for webapp"
-sudo adduser -U csye6225 --system
+sudo adduser -s /usr/sbin/nologin -U csye6225 --system
 
 ls -lart /opt
 if [ -d "$INSTALL_DIR" ]; then
