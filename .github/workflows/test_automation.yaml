@@ -60,6 +60,7 @@ jobs:
       - run: npm install
       - run: npm test
       
+      - run: rm .env
       - run: zip -r "${{ github.workspace}}/webapp.zip" "./../webapp"
       - run: ls -lart "${{ github.workspace}}"
            
