@@ -44,11 +44,11 @@ build {
   #-------------------------------------# 
 
 
-  provisioner "shell" {
-    scripts = [
-      "setup_service.sh"
-    ]
-  }
+  # provisioner "shell" {
+  #   scripts = [
+  #     "setup_service.sh"
+  #   ]
+  # }
 
 
 }
