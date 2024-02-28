@@ -1,6 +1,6 @@
 [Unit]
 Description=CSYE 6225 Webapp
-ConditionPathExists=/opt/webapp/app.js
+ConditionPathExists=/opt/webapp/.env
 Wants=network.target postgresql.service
 After=network.target postgresql.service
 
