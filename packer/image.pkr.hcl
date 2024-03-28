@@ -50,5 +50,16 @@ build {
   #   ]
   # }
 
+  #-------------------------------------# 
+  provisioner "file" {
+    source      = "ops_config.yaml"
+    destination = "/tmp/config.yaml"
+  }
+  provisioner "shell" {
+    scripts = [
+      "ops.sh"
+    ]
+  }
+  #-------------------------------------# 
 
 }
