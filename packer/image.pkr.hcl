@@ -7,12 +7,17 @@ packer {
   }
 }
 
+locals {
+  timestamp = regex_replace(formatdate("YYYY-MM-DD-hh-mm-ss", timestamp()), "[- TZ:]", "")
+}
+
 source "googlecompute" "custom-image" {
-  image_name          = var.image_name
+  image_name          = "${var.image_name}-${local.timestamp}"
   project_id          = var.project_id
   source_image_family = var.source_image_family
   zone                = var.zone
   ssh_username        = var.ssh_username
+  
 }
 
 build {

@@ -16,15 +16,15 @@ const bcrypt = require('bcrypt');
 const validator = require("email-validator");
 const User = require('./../models/user.js');
 
-
+const logger = require('../../logger.js');
 
 
 //GET
 router.get('/self', async (req, res, next) => {
-    console.log("Authorization header: ", req.headers.authorization)
+    logger.debug("Authorization header: ", req.headers.authorization)
     if (Object.keys(req.body).length > 0 || Object.keys(req.query).length > 0 || Object.keys(req.params).length > 0 ) {
         // Payload found, respond with 400 Bad Request
-        console.error('ERROR: Payload found')
+        logger.warn('Payload found')
         res.status(400).end();
     }else {
         if ( req.headers.authorization ) {
@@ -41,24 +41,24 @@ router.get('/self', async (req, res, next) => {
                     var selfUser = value
                     bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
                         if (err) {
-                            console.error('ERROR: Unauthorized',err)
+                            logger.error('Unauthorized',err)
                             res.status(401).end();
                         } else if (value) {
                             var userValue = value.dataValues
                             delete userValue['password'];
-                            console.log("GET returns Body: ",JSON.stringify(userValue, null, 2))
+                            logger.debug("GET returns Body: ",JSON.stringify(userValue, null, 2))
                             res.status(200).end(JSON.stringify(userValue, null, 2));
                         }
                     });
                 }).catch((err) => {
-                    console.error("ERROR Unable to find data:", err);
+                    logger.error("Unable to find data:", err);
                     res.status(400).end();
                 });
             }
         }
         else{
             // Header not found, respond with 400 Bad Request
-            console.error('ERROR: No Authorization Header found')
+            logger.warn('No Authorization Header found')
             res.status(400).end();
         }
     }
@@ -72,7 +72,7 @@ router.put('/self', async (req, res, next) => {
         if((req.body.account_created && Object.keys(req.body.account_created).length>0) ||
                 (req.body.account_updated && Object.keys(req.body.account_updated).length>0) ||
                     (req.body.username && Object.keys(req.body.username).length>0)){
-            console.error("ERROR: Unwanted payload");
+                        logger.warn("Unwanted payload");
             return res.status(400).end();
         }
         var auth = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
@@ -86,38 +86,39 @@ router.put('/self', async (req, res, next) => {
                 var selfUser = value
                 bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
                     if (err) {
-                        console.log('ERROR: Unauthorized',err)
+                        logger.error('Unauthorized',err)
                         res.status(401).end();
                     }else if (value) {
                         var updateAtt = req.body;
                         updateAtt.account_updated = new Date()
-                        console.log('updateAtt ', updateAtt)
-                        User.update(req.body, {
+                        updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
+                        logger.debug('updateAtt ', updateAtt)
+                        User.update(updateAtt, {
                             where: {
                                 username: requestedUsername
                             }
                         })
                             .then((value) => {
-                                console.log("Updated user entry!", value);
+                                logger.info("Account Updated")
                                 res.status(204).end();
                             })
                             .catch((err) => {
-                                console.error("ERROR: ", err);
+                                logger.error(err);
                                 res.status(400).end();
                             });
                 } else {
-                    console.error('ERROR Unable to find payload:!')
+                    logger.warn('Unable to find payload!')
                     res.status(400).end();
                 }
             });
         }).catch((err) => {
-            console.error("ERROR: ", err);
+            logger.error(err);
             res.status(400).end();
         });
     }
     else{
         // Payload not found, respond with 400 Bad Request
-        console.error('ERROR: No Authorization Header found')
+        logger.error('No Authorization Header found')
         res.status(400).end();
     }
 });
@@ -127,7 +128,7 @@ router.put('/self', async (req, res, next) => {
 //other
 router.use('/self', async (req, res, next) => {
     // unexpected API method received in call, return 405 HTTP status code
-    console.error("ERROR: API METHOD not allowed!")
+    logger.warn("API METHOD not allowed!")
     res.status(405).end();
 });
 
@@ -143,28 +144,31 @@ router.post('/', async (req, res, next) => {
                 first_name: data.first_name, last_name: data.last_name
             })
                 .then((value) => {
-                    console.log("Data entry completed! ID: ", value.id);
-                    res.status(201).end();
+                    var userValue = value.dataValues
+                    delete userValue['password'];
+                    logger.debug("POST returns Body: ",JSON.stringify(userValue, null, 2))
+                    logger.info("Data entry completed! ID: ", value.id);
+                    res.status(201).end(JSON.stringify(userValue, null, 2));
                 })
                 .catch((err) => {
-                    console.error("Data entry failed! Exception:", err);
+                    logger.error("Data entry failed! Exception:", err);
                     res.status(400).end();
                 });
         }else{
             // Payload not found, respond with 400 Bad Request
-            console.error('ERROR: Bad Email address/password')
+            logger.warn('Bad Email address/password')
             res.status(400).end();
         }
     } else {
         // Payload not found, respond with 400 Bad Request
-        console.error('ERROR: No payload found')
+        logger.warn('No payload found')
         res.status(400).end();
     }
 });
 
 router.use('/', async (req, res, next) => {
     // unexpected API method received in call, return 405 HTTP status code
-    console.error("ERROR: API METHOD not allowed!")
+    logger.warn("API METHOD not allowed!")
     res.status(405).end();
 });
 
