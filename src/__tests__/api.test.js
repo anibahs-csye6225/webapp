@@ -65,8 +65,6 @@ describe('v1/user API', () => {
         delete userDetails.account_created;
         delete userDetails.account_updated;
         delete userDetails.id;
-        // console.log("userDetails",userDetails);
-        // console.log("expectedBody",expectedBody)
         expect(userDetails).toEqual(expectedBody);
 
     });

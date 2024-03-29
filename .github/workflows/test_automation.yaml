@@ -15,15 +15,6 @@ jobs:
       matrix:
         node-version: [21.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: ${{ secrets.USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
-          POSTGRES_DB: ${{ secrets.DATABASE }}
-        ports:
-          - 5432:5432
     env:
       DB_PORT: ${{ secrets.DB_PORT }}
       DATABASE: ${{ secrets.DATABASE }}

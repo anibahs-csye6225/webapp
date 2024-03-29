@@ -8,6 +8,9 @@ const hc_router = require('./src/routes/healthcheck.router.js');
 const auth_router = require('./src/routes/auth.router.js');
 const db = require('./database.js');
 
+const logger = require('./logger.js');
+
+
 const app = express();
 //dotenv.config({ path: '.env' });
 
@@ -31,22 +34,22 @@ app.use('/v1/user', auth_router);
 //function for all other Endpoints
 //returns standard 404 HTTP status code for unrecognised Endpoints
 app.use('/', function(req, res) {
-    console.error('ERROR: Endpoint not found')
+    logger.error('ERROR: Endpoint not found')
     res.status(404).end();
 });
 
 async function initializeDatabase() {
     try {
-        console.log('Loaded environment variable for dialect at the start:', process.env.DIALECT);
+        logger.info('Loaded environment variable for dialect at the start:', process.env.DIALECT);
         await db.sync()
             .then((value) => {
-                console.log("Database connection established!");
+                logger.info("Database connection established!");
             })
             .catch((err) => {
-                console.error("Database connection Failed: ", err);
+                logger.error("Database connection Failed: ", err);
             })
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        logger.error('Unable to connect to the database:', error);
         process.exit(1);
     }
 }
@@ -57,7 +60,7 @@ initializeDatabase()
         // Start the server
         const PORT = process.env.PORT || 8080;
         app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+            logger.info(`Server is running on port ${PORT}`);
         });
     });
 

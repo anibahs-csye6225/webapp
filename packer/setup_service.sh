@@ -14,6 +14,7 @@ echo "Start csye6225.service"
 ls -lart /opt
 if [ -d "$INSTALL_DIR" ]; then
     # Systemd
+    sudo cat "$INSTALL_DIR/csye6225.service"
     sudo cp "$INSTALL_DIR/csye6225.service" "$SYSTEMD_DIR"
     ls -lart "$SYSTEMD_DIR"
     sudo chown -R csye6225:csye6225 $INSTALL_DIR/
