@@ -91,7 +91,9 @@ router.put('/self', async (req, res, next) => {
                     }else if (value) {
                         var updateAtt = req.body;
                         updateAtt.account_updated = new Date()
-                        updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
+                        if(req.body.password && Object.keys(req.body.password).length>0){
+                            updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
+                        }
                         logger.debug('updateAtt ', updateAtt)
                         User.update(updateAtt, {
                             where: {
