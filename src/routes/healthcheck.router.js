@@ -33,7 +33,7 @@ router.use('/', async (req, res, next) => {
             // 503 for failed connection
             db.authenticate()
                 .then((value) => {
-                    logger.info(value);
+                    logger.info("Health check complete, system is running");
                         res.status(200).end();
                 })
                 .catch((err) => {
