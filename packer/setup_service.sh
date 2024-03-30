@@ -2,7 +2,6 @@
 
 INSTALL_DIR="/opt/webapp"
 SYSTEMD_DIR="/etc/systemd/system/"
-LOG_DIR="/var/log/webapp"
 
 # check in service
 # echo "check npm installation"
@@ -10,9 +9,6 @@ LOG_DIR="/var/log/webapp"
 
 # echo "check postgres service"
 # sudo systemctl status postgresql --no-pager
-sudo mkdir "$LOG_DIR"
-sudo chown -R csye6225:csye6225 "$LOG_DIR"
-sudo chmod 755 -R "$LOG_DIR"
 
 echo "Start csye6225.service"
 ls -lart /opt
