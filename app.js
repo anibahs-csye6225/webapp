@@ -34,13 +34,12 @@ app.use('/v1/user', auth_router);
 //function for all other Endpoints
 //returns standard 404 HTTP status code for unrecognised Endpoints
 app.use('/', function(req, res) {
-    logger.error('ERROR: Endpoint not found')
+    logger.error('Endpoint not found!')
     res.status(404).end();
 });
 
 async function initializeDatabase() {
     try {
-        logger.info('Loaded environment variable for dialect at the start:', process.env.DIALECT);
         await db.sync()
             .then((value) => {
                 logger.info("Database connection established!");
