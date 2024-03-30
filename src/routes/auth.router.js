@@ -149,7 +149,7 @@ router.post('/', async (req, res, next) => {
                     var userValue = value.dataValues
                     delete userValue['password'];
                     logger.debug("POST returns Body: ",JSON.stringify(userValue, null, 2))
-                    logger.info("Data entry completed! ID: ", value.id);
+                    logger.info("Data entry completed! ", userValue);
                     res.status(201).end(JSON.stringify(userValue, null, 2));
                 })
                 .catch((err) => {
