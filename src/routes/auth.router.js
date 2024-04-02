@@ -15,6 +15,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const validator = require("email-validator");
 const User = require('./../models/user.js');
+const publishMessage = require('../utils/trigger.js');
 
 const logger = require('../../logger.js');
 
@@ -51,7 +52,7 @@ router.get('/self', async (req, res, next) => {
                         }
                     });
                 }).catch((err) => {
-                    logger.error("Unable to find data:", err);
+                    logger.error("Unable to find data ", err);
                     res.status(400).end();
                 });
             }
@@ -134,7 +135,45 @@ router.use('/self', async (req, res, next) => {
     res.status(405).end();
 });
 
+router.get('/verifyEmail/:token', async (req, res, next) => {
+    var token = req.params.token;
+    var data = jwt.decode(token,config.secret);
+    console.log(new Date(data.expiry));
+    console.log(new Date());
+    if(new Date(data.expiry) > new Date()){
+        User.findOne({ _id : data.user.id, name : data.user.username })
+            .exec(function(err,user){
+            if(err){
+                console.log(err);
+                res.status(400).end();
+            }else if(!user){
+                console.log("User not found");
+                res.status(400).end();
+            }else{
+                console.log("User found");
+                user.is_verified = true;
+                user.save(function(update_err,update_data){
+                    if(update_err){
+                        console.log(update_err);
+                        res.status(400).end();
+                    }else{
+                        console.log("Email is verified of user "+update_data._id);
+                        res.status(204).end();
+                    }
+                });
+            }
+        });
+    }else{
+        console.log("Link is expired");
+        res.status(400).end();
+    }
+});
 
+router.use('/verifyEmail', async (req, res, next) => {
+    // unexpected API method received in call, return 405 HTTP status code
+    logger.warn("API METHOD not allowed!")
+    res.status(405).end();
+});
 
 // handles POST API to create user
 router.post('/', async (req, res, next) => {
@@ -150,6 +189,15 @@ router.post('/', async (req, res, next) => {
                     delete userValue['password'];
                     logger.debug("POST returns Body: ",JSON.stringify(userValue, null, 2))
                     logger.info("Data entry completed! ", userValue);
+                    var payload = { "account": userValue, "db_metadata": {
+                        "DATABASE": process.env.DATABASE,
+                        "USERNAME": process.env.USERNAME,
+                        "PASSWORD": process.env.PASSWORD,
+                        "HOST": process.env.HOST,
+                        "DIALECT": process.env.DIALECT,
+                        "DB_PORT": process.env.DB_PORT,
+                    }}
+                    publishMessage("projects/dev-csye6225-414718/topics/verify_email",payload);
                     res.status(201).end(JSON.stringify(userValue, null, 2));
                 })
                 .catch((err) => {
