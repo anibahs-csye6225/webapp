@@ -117,51 +117,13 @@ router.put('/self', async (req, res, next) => {
                 where: {
                     username: requestedUsername
                 }
-            }).then((value) => {
+            }).then(() => {
                 logger.info("Account Updated")
                 res.status(204).end();
             }).catch((err) => {
                 logger.error(err);
                 res.status(400).end();
             });
-        // selfUser = User.findOne({
-        //     where: {
-        //         username: requestedUsername
-        //     }
-        // }).then((value) => {
-        //         var selfUser = value
-        //         bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
-        //             if (err) {
-        //                 logger.error('Unauthorized',err)
-        //                 res.status(401).end();
-        //             }else if (value) {
-        //                 var updateAtt = req.body;
-        //                 updateAtt.account_updated = new Date()
-        //                 if(req.body.password && Object.keys(req.body.password).length>0){
-        //                     updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
-        //                 }
-        //                 logger.debug('updateAtt ', updateAtt)
-        //                 User.update(updateAtt, {
-        //                     where: {
-        //                         username: requestedUsername
-        //                     }
-        //                 })
-        //                     .then((value) => {
-        //                         logger.info("Account Updated")
-        //                         res.status(204).end();
-        //                     })
-        //                     .catch((err) => {
-        //                         logger.error(err);
-        //                         res.status(400).end();
-        //                     });
-        //         } else {
-        //             logger.warn('Unable to find payload!')
-        //             res.status(400).end();
-        //         }
-        //     });
-        // }).catch((err) => {
-        //     logger.error(err);
-        //     res.status(400).end();
         });
     }
     else{
@@ -180,37 +142,45 @@ router.use('/self', async (req, res, next) => {
     res.status(405).end();
 });
 
-router.get('/verifyEmail/:token', async (req, res, next) => {
-    var token = req.params.token;
-    var data = jwt.decode(token,config.secret);
-    console.log(new Date(data.expiry));
-    console.log(new Date());
-    if(new Date(data.expiry) > new Date()){
-        User.findOne({ _id : data.user.id, name : data.user.username })
-            .exec(function(err,user){
-            if(err){
-                console.log(err);
-                res.status(400).end();
-            }else if(!user){
-                console.log("User not found");
-                res.status(400).end();
-            }else{
-                console.log("User found");
-                user.is_verified = true;
-                user.save(function(update_err,update_data){
-                    if(update_err){
-                        console.log(update_err);
-                        res.status(400).end();
-                    }else{
-                        console.log("Email is verified of user "+update_data._id);
-                        res.status(204).end();
+router.get('/verifyEmail/:username/:token', async (req, res, next) => {
+    try{
+        var requestedUsername = req.params.username;
+        var token = req.params.token;
+        const selfUser = await User.findOne({             
+            where: {
+                username: requestedUsername
+        }});
+            
+        if(!selfUser){
+            logger.err("User not found");
+            res.status(400).end();
+        }else{
+            logger.debug("User found");
+            if(token==selfUser.dataValues.verificationToken && new Date(selfUser.verificationExpiry) > new Date()){
+                console.debug("selfUser", selfUser.dataValues);
+                var updateAtt = selfUser.dataValues
+                updateAtt.account_updated = new Date()
+                updateAtt.is_verified = true;
+                console.debug("updateAtt", updateAtt);
+                selfUser.update(updateAtt, {
+                    where: {
+                        username: requestedUsername
                     }
+                }).then(() => {
+                    logger.info("User Verified!")
+                    return res.status(200).json({message:"User Verified!"});
+                }).catch((err) => {
+                    logger.error(err);
+                    return res.status(400).json({message:"Verification failed!"});
                 });
+            }else{
+                logger.error("Verification failed!");
+                return res.status(400).json({message:"Verification failed!"});
             }
-        });
-    }else{
-        console.log("Link is expired");
-        res.status(400).end();
+        }
+    }catch(error){
+        logger.error(error)
+        return res.status(400).end();
     }
 });
 
@@ -228,27 +198,26 @@ router.post('/', async (req, res, next) => {
             User.create({
                 username: data.username, password: bcrypt.hashSync(data.password, bcrypt.genSaltSync(8)),
                 first_name: data.first_name, last_name: data.last_name
-            })
-                .then((value) => {
-                    var userValue = value.dataValues
-                    delete userValue['password'];
-                    logger.debug("POST returns Body: ",JSON.stringify(userValue, null, 2))
-                    logger.info("Data entry completed! ", userValue);
-                    var payload = { "account": userValue, "db_metadata": {
-                        "DATABASE": process.env.DATABASE,
-                        "USERNAME": process.env.USERNAME,
-                        "PASSWORD": process.env.PASSWORD,
-                        "HOST": process.env.HOST,
-                        "DIALECT": process.env.DIALECT,
-                        "DB_PORT": process.env.DB_PORT,
-                    }}
-                    publishMessage("projects/dev-csye6225-414718/topics/verify_email",payload);
-                    res.status(201).end(JSON.stringify(userValue, null, 2));
-                })
-                .catch((err) => {
-                    logger.error("Data entry failed! Exception:", err);
-                    res.status(400).end();
-                });
+            }).then((value) => {
+                var userValue = value.dataValues
+                delete userValue['password'];
+                logger.debug("POST returns Body: ",JSON.stringify(userValue, null, 2))
+                logger.info("Data entry completed! ", userValue);
+                var payload = { "account": userValue, 
+                // "db_metadata": {
+                //     "DATABASE": process.env.DATABASE,
+                //     "USERNAME": process.env.USERNAME,
+                //     "PASSWORD": process.env.PASSWORD,
+                //     "HOST": process.env.HOST,
+                //     "DIALECT": process.env.DIALECT,
+                //     "DB_PORT": process.env.DB_PORT,}
+                }
+                publishMessage("projects/dev-csye6225-414718/topics/verify_email",payload);
+                res.status(201).end(JSON.stringify(userValue, null, 2));
+            }).catch((err) => {
+                logger.error("Data entry failed! Exception:", err);
+                res.status(400).end();
+            });
         }else{
             // Payload not found, respond with 400 Bad Request
             logger.warn('Bad Email address/password')

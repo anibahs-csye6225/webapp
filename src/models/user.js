@@ -44,6 +44,19 @@ const User= db.define('User', {
         defaultValue: DataTypes.NOW,
         allowNull: false,
     },
+    verificationToken: {
+        type: DataTypes.UUID,
+        allowNull: true,
+    },
+    verificationExpiry: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    is_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: true,
+    }
 }, {
     timestamps: false,
     schema: 'public'

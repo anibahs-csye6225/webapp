@@ -21,6 +21,13 @@ The REST API is a GET method request, it does not accept payload, and will respo
 - Postgres 16
 - PgAdmin
 
+## Roles for Packer Service Account:
+- Cloud SQL Admin
+- Compute Instance Admin (v1)
+- Compute Network Admin
+- Service Account User
+- Service Directory Editor
+
 
 ## References:
 
