@@ -9,7 +9,7 @@ dotenv.config({ path: '.env' });
 console.log("process.env.LOGPATH", process.env.LOGPATH)
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: 'debug',
   format: combine(errors({ stack: true }), timestamp(), json()),
   transports: [
     new winston.transports.File({ filename: process.env.LOGPATH? process.env.LOGPATH:'./webapp.log'})

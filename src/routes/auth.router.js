@@ -28,32 +28,38 @@ router.get('/self', async (req, res, next) => {
         logger.warn('Payload found')
         res.status(400).end();
     }else {
-        if ( req.headers.authorization ) {
+        try{
+            if ( req.headers.authorization ) {
             //check base64
             if(req.headers.authorization.split(' ')[0]==='Basic'){
                 var auth = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
+                console.log("auth", auth)
                 var requestedUsername = auth[0];
                 var password = auth[1];
-                selfUser = User.findOne({
+                const selfUser = await User.findOne({
                     where: {
                         username: requestedUsername
                     }
-                }).then((value) => {
-                    var selfUser = value
-                    bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
-                        if (err) {
-                            logger.error('Unauthorized',err)
-                            res.status(401).end();
-                        } else if (value) {
-                            var userValue = value.dataValues
-                            delete userValue['password'];
-                            logger.debug("GET returns Body: ",JSON.stringify(userValue, null, 2))
-                            res.status(200).end(JSON.stringify(userValue, null, 2));
-                        }
-                    });
-                }).catch((err) => {
-                    logger.error("Unable to find data ", err);
+                });
+                if(!selfUser){
+                    logger.error(err);
                     res.status(400).end();
+                }
+                bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
+                    if (err) {
+                        logger.error('Error',err)
+                        res.status(400).end();
+                    } else if(!data){
+                        logger.error('Unauthorized',err)
+                        res.status(401).end();
+                    } else{
+                        var returnBody = selfUser.dataValues
+                        delete returnBody['password'];
+                        const returnBodyText = JSON.stringify(returnBody, null, 2);
+                        logger.debug("GET returns Body: ",returnBodyText)
+                        console.log("GET returns Body: ",returnBodyText)
+                        res.status(200).end(JSON.stringify(returnBody, null, 2));
+                    }                  
                 });
             }
         }
@@ -61,6 +67,10 @@ router.get('/self', async (req, res, next) => {
             // Header not found, respond with 400 Bad Request
             logger.warn('No Authorization Header found')
             res.status(400).end();
+        }
+    } catch (error) {
+            // Handle errors and send appropriate response
+            res.status(400).send();
         }
     }
 });
@@ -79,44 +89,79 @@ router.put('/self', async (req, res, next) => {
         var auth = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
         var requestedUsername = auth[0];
         var password = auth[1];
-        selfUser = User.findOne({
+        const selfUser = await User.findOne({
             where: {
                 username: requestedUsername
             }
-        }).then((value) => {
-                var selfUser = value
-                bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
-                    if (err) {
-                        logger.error('Unauthorized',err)
-                        res.status(401).end();
-                    }else if (value) {
-                        var updateAtt = req.body;
-                        updateAtt.account_updated = new Date()
-                        if(req.body.password && Object.keys(req.body.password).length>0){
-                            updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
-                        }
-                        logger.debug('updateAtt ', updateAtt)
-                        User.update(updateAtt, {
-                            where: {
-                                username: requestedUsername
-                            }
-                        })
-                            .then((value) => {
-                                logger.info("Account Updated")
-                                res.status(204).end();
-                            })
-                            .catch((err) => {
-                                logger.error(err);
-                                res.status(400).end();
-                            });
-                } else {
-                    logger.warn('Unable to find payload!')
-                    res.status(400).end();
-                }
-            });
-        }).catch((err) => {
+        });
+        if(!selfUser){
             logger.error(err);
             res.status(400).end();
+        }
+        bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
+            if (err) {
+                logger.error('Error',err)
+                res.status(400).end();
+            }
+            if(!data){
+                logger.error('Unauthorized',err)
+                res.status(401).end();
+            }
+            var updateAtt = req.body;
+            updateAtt.account_updated = new Date()
+            if(req.body.password && Object.keys(req.body.password).length>0){
+                updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
+            }
+            logger.debug('updateAtt ', updateAtt)
+            User.update(updateAtt, {
+                where: {
+                    username: requestedUsername
+                }
+            }).then((value) => {
+                logger.info("Account Updated")
+                res.status(204).end();
+            }).catch((err) => {
+                logger.error(err);
+                res.status(400).end();
+            });
+        // selfUser = User.findOne({
+        //     where: {
+        //         username: requestedUsername
+        //     }
+        // }).then((value) => {
+        //         var selfUser = value
+        //         bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
+        //             if (err) {
+        //                 logger.error('Unauthorized',err)
+        //                 res.status(401).end();
+        //             }else if (value) {
+        //                 var updateAtt = req.body;
+        //                 updateAtt.account_updated = new Date()
+        //                 if(req.body.password && Object.keys(req.body.password).length>0){
+        //                     updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
+        //                 }
+        //                 logger.debug('updateAtt ', updateAtt)
+        //                 User.update(updateAtt, {
+        //                     where: {
+        //                         username: requestedUsername
+        //                     }
+        //                 })
+        //                     .then((value) => {
+        //                         logger.info("Account Updated")
+        //                         res.status(204).end();
+        //                     })
+        //                     .catch((err) => {
+        //                         logger.error(err);
+        //                         res.status(400).end();
+        //                     });
+        //         } else {
+        //             logger.warn('Unable to find payload!')
+        //             res.status(400).end();
+        //         }
+        //     });
+        // }).catch((err) => {
+        //     logger.error(err);
+        //     res.status(400).end();
         });
     }
     else{
