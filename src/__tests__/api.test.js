@@ -65,6 +65,9 @@ describe('v1/user API', () => {
         delete userDetails.account_created;
         delete userDetails.account_updated;
         delete userDetails.id;
+        delete userDetails.is_verified;
+        delete userDetails.verificationExpiry;
+        delete userDetails.verificationToken;
         expect(userDetails).toEqual(expectedBody);
 
     });
@@ -88,6 +91,9 @@ describe('v1/user API', () => {
         delete newUserDetails.account_created;
         delete newUserDetails.account_updated;
         delete newUserDetails.id;
+        delete newUserDetails.is_verified;
+        delete newUserDetails.verificationExpiry;
+        delete newUserDetails.verificationToken;
         expect(newUserDetails).toEqual(expectedUpdatedBody);
 
 
