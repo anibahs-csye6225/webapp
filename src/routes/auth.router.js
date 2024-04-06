@@ -143,6 +143,7 @@ router.use('/self', async (req, res, next) => {
 });
 
 router.get('/verifyEmail/:username/:token', async (req, res, next) => {
+    logger.info("Verification in progress")
     try{
         var requestedUsername = req.params.username;
         var token = req.params.token;
@@ -157,6 +158,7 @@ router.get('/verifyEmail/:username/:token', async (req, res, next) => {
         }else{
             logger.debug("User found");
             if(token==selfUser.dataValues.verificationToken && new Date(selfUser.verificationExpiry) > new Date()){
+                console.debug("condition",(token==selfUser.dataValues.verificationToken && new Date(selfUser.verificationExpiry) > new Date()));
                 console.debug("selfUser", selfUser.dataValues);
                 var updateAtt = selfUser.dataValues
                 updateAtt.account_updated = new Date()
@@ -201,17 +203,9 @@ router.post('/', async (req, res, next) => {
             }).then((value) => {
                 var userValue = value.dataValues
                 delete userValue['password'];
-                logger.debug("POST returns Body: ",JSON.stringify(userValue, null, 2))
+                console.log("POST returns Body: ",JSON.stringify(userValue, null, 2))
                 logger.info("Data entry completed! ", userValue);
-                var payload = { "account": userValue, 
-                // "db_metadata": {
-                //     "DATABASE": process.env.DATABASE,
-                //     "USERNAME": process.env.USERNAME,
-                //     "PASSWORD": process.env.PASSWORD,
-                //     "HOST": process.env.HOST,
-                //     "DIALECT": process.env.DIALECT,
-                //     "DB_PORT": process.env.DB_PORT,}
-                }
+                var payload = { "account": userValue }
                 publishMessage("projects/dev-csye6225-414718/topics/verify_email",payload);
                 res.status(201).end(JSON.stringify(userValue, null, 2));
             }).catch((err) => {
