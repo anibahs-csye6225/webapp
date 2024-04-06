@@ -53,12 +53,17 @@ router.get('/self', async (req, res, next) => {
                         logger.error('Unauthorized',err)
                         res.status(401).end();
                     } else{
-                        var returnBody = selfUser.dataValues
-                        delete returnBody['password'];
-                        const returnBodyText = JSON.stringify(returnBody, null, 2);
-                        logger.debug("GET returns Body: ",returnBodyText)
-                        console.log("GET returns Body: ",returnBodyText)
-                        res.status(200).end(JSON.stringify(returnBody, null, 2));
+                        if(selfUser.dataValues.is_verified){
+                            var returnBody = selfUser.dataValues
+                            delete returnBody['password'];
+                            const returnBodyText = JSON.stringify(returnBody, null, 2);
+                            logger.debug("GET returns Body: ",returnBodyText)
+                            console.log("GET returns Body: ",returnBodyText)
+                            res.status(200).end(JSON.stringify(returnBody, null, 2));
+                        }else{
+                            logger.error("Unverified user")
+                            res.status(403).end();
+                        }
                     }                  
                 });
             }
@@ -107,23 +112,28 @@ router.put('/self', async (req, res, next) => {
                 logger.error('Unauthorized',err)
                 res.status(401).end();
             }
-            var updateAtt = req.body;
-            updateAtt.account_updated = new Date()
-            if(req.body.password && Object.keys(req.body.password).length>0){
-                updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
-            }
-            logger.debug('updateAtt ', updateAtt)
-            User.update(updateAtt, {
-                where: {
-                    username: requestedUsername
+            if(selfUser.dataValues.is_verified){
+                var updateAtt = req.body;
+                updateAtt.account_updated = new Date()
+                if(req.body.password && Object.keys(req.body.password).length>0){
+                    updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
                 }
-            }).then(() => {
-                logger.info("Account Updated")
-                res.status(204).end();
-            }).catch((err) => {
-                logger.error(err);
-                res.status(400).end();
-            });
+                logger.debug('updateAtt ', updateAtt)
+                User.update(updateAtt, {
+                    where: {
+                        username: requestedUsername
+                    }
+                }).then(() => {
+                    logger.info("Account Updated")
+                    res.status(204).end();
+                }).catch((err) => {
+                    logger.error(err);
+                    res.status(400).end();
+                });
+            }else{
+                logger.error("Unverified user")
+                res.status(403).end();
+            }
         });
     }
     else{
