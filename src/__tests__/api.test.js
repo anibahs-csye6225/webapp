@@ -23,11 +23,11 @@ describe('v1/user API', () => {
         "username": un
     };
     const updatePayload = {
-        "first_name":"Jack",
+        "first_name": "Jack",
         "last_name": ln,
     }
     const expectedUpdatedBody = {
-        "first_name":"Jack",
+        "first_name": "Jack",
         "last_name": ln,
         "username": un
     };
