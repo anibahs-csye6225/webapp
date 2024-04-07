@@ -176,7 +176,7 @@ router.get('/verifyEmail/:username/:token', async (req, res, next) => {
                 updateAtt.account_updated = new Date()
                 updateAtt.is_verified = true;
                 console.debug("updateAtt", updateAtt);
-                selfUser.update(updateAtt, {
+                User.update(updateAtt, {
                     where: {
                         username: requestedUsername
                     }
