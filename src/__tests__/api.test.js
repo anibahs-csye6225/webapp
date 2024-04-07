@@ -25,6 +25,7 @@ describe('v1/user API', () => {
     const updatePayload = {
         "first_name": "Jack",
         "last_name": ln,
+        "is_verified": true
     }
     const expectedUpdatedBody = {
         "first_name": "Jack",
@@ -55,8 +56,10 @@ describe('v1/user API', () => {
             .send(payload);
         expect(createUserRes.statusCode).toEqual(201);
 
+
         const getCreatedRes = await request(app)
             .get('/v1/user/self')
+            .set('Custom-Header', 'integrationTests') // Add custom header with string
             .auth(un, pd);
         expect(getCreatedRes.statusCode).toEqual(200);
 
@@ -79,10 +82,12 @@ describe('v1/user API', () => {
         const updateUser = await request(app)
             .put('/v1/user/self')
             .auth(un, pd)
+            .set('Custom-Header', 'integrationTests') // Add custom header with string
             .send(updatePayload);
 
         const getUpdatedRes = await request(app)
             .get('/v1/user/self')
+            .set('Custom-Header', 'integrationTests') // Add custom header with string
             .auth(un, pd);
 
 

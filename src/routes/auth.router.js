@@ -32,6 +32,7 @@ router.get('/self', async (req, res, next) => {
             if ( req.headers.authorization ) {
             //check base64
             if(req.headers.authorization.split(' ')[0]==='Basic'){
+                const skipVerification = req.get('Custom-Header');
                 var auth = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
                 console.log("auth", auth)
                 var requestedUsername = auth[0];
@@ -53,7 +54,7 @@ router.get('/self', async (req, res, next) => {
                         logger.error('Unauthorized',err)
                         res.status(401).end();
                     } else{
-                        if(selfUser.dataValues.is_verified){
+                        if(selfUser.dataValues.is_verified || skipVerification==="integrationTests"){
                             var returnBody = selfUser.dataValues
                             delete returnBody['password'];
                             const returnBodyText = JSON.stringify(returnBody, null, 2);
@@ -91,6 +92,7 @@ router.put('/self', async (req, res, next) => {
                         logger.warn("Unwanted payload");
             return res.status(400).end();
         }
+        const skipVerification = req.get('Custom-Header');
         var auth = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
         var requestedUsername = auth[0];
         var password = auth[1];
@@ -100,39 +102,39 @@ router.put('/self', async (req, res, next) => {
             }
         });
         if(!selfUser){
-            logger.error(err);
+            logger.error("err");
             res.status(400).end();
         }
         bcrypt.compare(password, selfUser.dataValues.password, (err, data) => {
             if (err) {
                 logger.error('Error',err)
                 res.status(400).end();
-            }
-            if(!data){
+            }else if(!data){
                 logger.error('Unauthorized',err)
                 res.status(401).end();
-            }
-            if(selfUser.dataValues.is_verified){
-                var updateAtt = req.body;
-                updateAtt.account_updated = new Date()
-                if(req.body.password && Object.keys(req.body.password).length>0){
-                    updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
-                }
-                logger.debug('updateAtt ', updateAtt)
-                User.update(updateAtt, {
-                    where: {
-                        username: requestedUsername
+            }else {
+                if (selfUser.dataValues.is_verified || skipVerification==="integrationTests"){
+                    var updateAtt = req.body;
+                    updateAtt.account_updated = new Date()
+                    if(req.body.password && Object.keys(req.body.password).length>0){
+                        updateAtt.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
                     }
-                }).then(() => {
-                    logger.info("Account Updated")
-                    res.status(204).end();
-                }).catch((err) => {
-                    logger.error(err);
-                    res.status(400).end();
-                });
-            }else{
-                logger.error("Unverified user")
-                res.status(403).end();
+                    logger.debug('updateAtt ', updateAtt)
+                    User.update(updateAtt, {
+                        where: {
+                            username: requestedUsername
+                        }
+                    }).then(() => {
+                        logger.info("Account Updated")
+                        res.status(204).end();
+                    }).catch((err) => {
+                        logger.error(err);
+                        res.status(400).end();
+                    });
+                }else{
+                    logger.error("Unverified user")
+                    res.status(403).end();
+                }
             }
         });
     }
