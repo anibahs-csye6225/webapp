@@ -219,6 +219,7 @@ router.post('/', async (req, res, next) => {
                 logger.info("Data entry completed! ", userValue);
                 var payload = { "account": userValue }
                 publishMessage("projects/dev-csye6225-414718/topics/verify_email",payload);
+                logger.info("Mail Sent!");
                 res.status(201).end(JSON.stringify(userValue, null, 2));
             }).catch((err) => {
                 logger.error("Data entry failed! Exception:", err);
