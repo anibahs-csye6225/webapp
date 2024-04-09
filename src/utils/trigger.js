@@ -1,10 +1,6 @@
 const { PubSub } = require('@google-cloud/pubsub');
 
-
 const pubSubClient = new PubSub();
-const topic = pubSubClient.topic('my-topic');
-const subscription = topic.subscription('my-subscription');
-
 
 const publishMessage = async (topicName, payload) => {
     const dataBuffer = Buffer.from(JSON.stringify(payload));
@@ -13,10 +9,12 @@ const publishMessage = async (topicName, payload) => {
       const messageId = await pubSubClient
         .topic(topicName)
         .publishMessage({ data: dataBuffer });
-      console.log(`Message ${messageId} published.`);
+      console.log("Message", messageId, "published.");
+      logger.info("Message", messageId, "published.")
       return messageId;
     } catch (error) {
-      console.error(`Received error while publishing: ${error.message}`);
+      console.error("Received error while publishing: ", error.message);
+      logger.error("Received error while publishing: ", error.message);
     }
 };
 

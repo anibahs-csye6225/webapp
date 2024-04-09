@@ -21,10 +21,10 @@ router.get('/:path', async (req, res) => {
 
 // check cases and return appropriate HTTP status code
 router.use('/', async (req, res, next) => {
-    logger.debug('Request: ', Object.keys(req.body).length, Object.keys(req.query).length, req.query)
     if(req.method == "GET"){
         if (Object.keys(req.body).length > 0 || Object.keys(req.query).length > 0 || Object.keys(req.params).length > 0 ) {
             // Payload detected, respond with 400 Bad Request
+            logger.warn('Request: ', Object.keys(req.body).length, Object.keys(req.query).length, req.query)
             logger.warn('Request contains some payload: ', req.body, req.query)
             res.status(400).end();
         }
@@ -33,12 +33,12 @@ router.use('/', async (req, res, next) => {
             // 503 for failed connection
             db.authenticate()
                 .then((value) => {
-                    logger.info("Health check complete, system is running");
-                        res.status(200).end();
+                    logger.debug("Health check complete, system is running");
+                    res.status(200).end();
                 })
                 .catch((err) => {
                     logger.error(err);
-                        res.status(503).end();
+                    res.status(503).end();
                 })
         }
     } else {
