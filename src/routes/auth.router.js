@@ -218,14 +218,14 @@ router.post('/', async (req, res, next) => {
             }).then((value) => {
                 var userValue = value.dataValues
                 delete userValue['password'];
-                delete returnBody['verificationToken'];
-                delete returnBody['verificationExpiry'];
-                delete returnBody['is_verified'];
+                delete userValue['verificationToken'];
+                delete userValue['verificationExpiry'];
+                delete userValue['is_verified'];
                 console.log("POST returns Body: ",JSON.stringify(userValue, null, 2))
                 logger.info("Data entry completed! ", userValue);
                 var payload = { "account": userValue }
                 publishMessage("projects/dev-csye6225-414718/topics/verify_email",payload);
-                logger.info("Mail Sent!");
+                logger.info("Mail sent to user", userValue.username);
                 res.status(201).end(JSON.stringify(userValue, null, 2));
             }).catch((err) => {
                 logger.error("Data entry failed! Exception:", err);
