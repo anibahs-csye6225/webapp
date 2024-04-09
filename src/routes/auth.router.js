@@ -57,6 +57,9 @@ router.get('/self', async (req, res, next) => {
                         if(selfUser.dataValues.is_verified || skipVerification==="integrationTests"){
                             var returnBody = selfUser.dataValues
                             delete returnBody['password'];
+                            delete returnBody['verificationToken'];
+                            delete returnBody['verificationExpiry'];
+                            delete returnBody['is_verified'];
                             const returnBodyText = JSON.stringify(returnBody, null, 2);
                             logger.debug("GET returns Body: ",returnBodyText)
                             console.log("GET returns Body: ",returnBodyText)
@@ -215,6 +218,9 @@ router.post('/', async (req, res, next) => {
             }).then((value) => {
                 var userValue = value.dataValues
                 delete userValue['password'];
+                delete returnBody['verificationToken'];
+                delete returnBody['verificationExpiry'];
+                delete returnBody['is_verified'];
                 console.log("POST returns Body: ",JSON.stringify(userValue, null, 2))
                 logger.info("Data entry completed! ", userValue);
                 var payload = { "account": userValue }
