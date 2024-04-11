@@ -43,7 +43,7 @@ jobs:
       LOGPATH: ${{ vars.LOGPATH }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
       CURRENT_DATE: ${{ steps.set_date.outputs.current_date }}
-      INSTANCE_TEMPLATE_NAME: ${{env.INSTANCE_TEMPLATE_UPDATE}}-$CURRENT_DATE
+      INSTANCE_TEMPLATE_NAME: ${{var.INSTANCE_TEMPLATE_UPDATE}}-$CURRENT_DATE
 
     steps:
       - name: Set current date
