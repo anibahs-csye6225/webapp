@@ -143,10 +143,6 @@ jobs:
 
       - name: Create updated instance template
         run: |
-          current_date=$(date +'%m%d%H%M')
-          instance_template_name="${{env.INSTANCE_TEMPLATE_UPDATE}}-$current_date"
-          echo "Instance template name: $instance_template_name"
-
           gcloud beta compute instance-templates create ${{ steps.date.outputs.template-name }} \
             --project=${{env.PROJECT_ID}} \
             --machine-type=e2-medium \
