@@ -35,6 +35,12 @@ jobs:
       CLOUD_HOST: ${{ secrets.CLOUD_HOST }}      
       DIALECT: ${{ secrets.DIALECT }}
       DB_PORT: ${{ secrets.DB_PORT }}
+      INSTANCE_TEMPLATE_UPDATE: ${{ env.INSTANCE_TEMPLATE_UPDATE }}
+      PROJECT_ID: ${{ env.PROJECT_ID }}
+      IMAGE_ID: ${{ env.IMAGE_ID }}
+      REGION: ${{ env.REGION }}
+      SERVICE_ACCOUNT: ${{ env.SERVICE_ACCOUNT }}
+      LOGPATH: ${{ env.LOGPATH }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
     steps:
