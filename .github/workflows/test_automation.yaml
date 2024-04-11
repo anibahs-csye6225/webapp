@@ -42,17 +42,15 @@ jobs:
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
       LOGPATH: ${{ vars.LOGPATH }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
-      CURRENT_DATE: ${{ format('{0:MM-dd-HH-mm}', github.event.created_at) }}
-      INSTANCE_TEMPLATE_NAME: ${{vars.INSTANCE_TEMPLATE_UPDATE}}-$CURRENT_DATE
 
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "::set-output name=currentts::$(date +'%m%d%H%M')"
 
       - name: Get Instance template name
         id: name
-        run: echo "::set-output name=template-name::${{ vars.INSTANCE_TEMPLATE_UPDATE }}-${{ steps.date.outputs.date }}"
+        run: echo "::set-output name=template-name::${{ vars.INSTANCE_TEMPLATE_UPDATE }}-${{ steps.date.outputs.currentts }}"
 
       - uses: actions/checkout@v3
         name: Use Node.js ${{ matrix.node-version }}
