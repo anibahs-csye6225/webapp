@@ -44,6 +44,7 @@ jobs:
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
       CURRENT_DATE: $(date +'%m%d%H%M')
       INSTANCE_TEMPLATE_NAME: "${{env.INSTANCE_TEMPLATE_UPDATE}}-${{ env.CURRENT_DATE }}"
+
     steps:
 
       - uses: actions/checkout@v3
@@ -156,11 +157,11 @@ jobs:
 
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr \
-          --template=$instance_template_name --region=${{env.REGION}}
+          --template=${{env.INSTANCE_TEMPLATE_UPDATE}} --region=${{env.REGION}}
 
       - name: Issue rolling update on instance group
         run: gcloud compute instance-groups managed rolling-action start-update mig-mgr \
-          --version=template=$instance_template_name --region=${{env.REGION}}
+          --version=template=${{env.INSTANCE_TEMPLATE_UPDATE}} --region=${{env.REGION}}
       
       - name: Monitor updates
         run: gcloud compute instance-groups managed wait-until mig-mgr \
