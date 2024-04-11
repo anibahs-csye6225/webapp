@@ -154,12 +154,12 @@ jobs:
         # --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
 
       - name: Set updated instance template to instance group
-        run: gcloud compute instance-groups managed set-instance-template \
-          mig-mgr --template=${{env.INSTANCE_TEMPLATE_UPDATE}} --region=${{env.REGION}}
+        run: gcloud compute instance-groups managed set-instance-template mig-mgr \
+          --template=$instance_template_name --region=${{env.REGION}}
 
       - name: Issue rolling update on instance group
         run: gcloud compute instance-groups managed rolling-action start-update mig-mgr \
-          --version=template=${{env.INSTANCE_TEMPLATE_UPDATE}} --region=${{env.REGION}}
+          --version=template=$instance_template_name --region=${{env.REGION}}
       
       - name: Monitor updates
         run: gcloud compute instance-groups managed wait-until mig-mgr \
