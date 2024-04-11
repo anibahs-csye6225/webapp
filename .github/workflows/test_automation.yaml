@@ -42,10 +42,15 @@ jobs:
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
       LOGPATH: ${{ vars.LOGPATH }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
-      CURRENT_DATE: $(date +'%m%d%H%M')
-      INSTANCE_TEMPLATE_NAME: "${{env.INSTANCE_TEMPLATE_UPDATE}}-${{ env.CURRENT_DATE }}"
+      CURRENT_DATE: ${{ steps.set_date.outputs.current_date }}
+      INSTANCE_TEMPLATE_NAME: "${{env.INSTANCE_TEMPLATE_UPDATE}}-$CURRENT_DATE"
 
     steps:
+      - name: Set current date
+        id: set_date
+        run: |
+          echo "Setting current date..."
+          echo "::set-output name=current_date::$(date +'%m%d%H%M')"
 
       - uses: actions/checkout@v3
         name: Use Node.js ${{ matrix.node-version }}
@@ -142,7 +147,7 @@ jobs:
           instance_template_name="${{env.INSTANCE_TEMPLATE_UPDATE}}-$current_date"
           echo "Instance template name: $instance_template_name"
 
-          gcloud beta compute instance-templates create $instance_template_name \
+          gcloud beta compute instance-templates create $INSTANCE_TEMPLATE_UPDATE \
             --project=${{env.PROJECT_ID}} \
             --machine-type=e2-medium \
             --instance-template-region=${{env.REGION}} \
@@ -157,11 +162,11 @@ jobs:
 
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr \
-          --template=${{env.INSTANCE_TEMPLATE_UPDATE}} --region=${{env.REGION}}
+          --template=$INSTANCE_TEMPLATE_UPDATE --region=${{env.REGION}}
 
       - name: Issue rolling update on instance group
         run: gcloud compute instance-groups managed rolling-action start-update mig-mgr \
-          --version=template=${{env.INSTANCE_TEMPLATE_UPDATE}} --region=${{env.REGION}}
+          --version=template=$INSTANCE_TEMPLATE_UPDATE --region=${{env.REGION}}
       
       - name: Monitor updates
         run: gcloud compute instance-groups managed wait-until mig-mgr \
