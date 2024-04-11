@@ -136,7 +136,7 @@ jobs:
 
       - name: Create updated instance template
         run: |
-          gcloud beta compute instance-templates create `${{env.INSTANCE_TEMPLATE_UPDATE}}-$(date + '%m%d%H%M')`` \
+          gcloud beta compute instance-templates create `${{env.INSTANCE_TEMPLATE_UPDATE}}-$(date + '%m%d%H%M') \
             --project=${{env.PROJECT_ID}} \
             --machine-type=e2-medium \
             --instance-template-region=${{env.REGION}} \
