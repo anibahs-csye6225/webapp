@@ -43,7 +43,7 @@ jobs:
       LOGPATH: ${{ vars.LOGPATH }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
       CURRENT_DATE: $(date +'%m%d%H%M')
-      INSTANCE_TEMPLATE_NAME: "${{env.INSTANCE_TEMPLATE_UPDATE}}-$env.CURRENT_DATE"
+      INSTANCE_TEMPLATE_NAME: "${{env.INSTANCE_TEMPLATE_UPDATE}}-${{ env.CURRENT_DATE }}"
     steps:
 
       - uses: actions/checkout@v3
