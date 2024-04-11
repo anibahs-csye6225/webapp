@@ -50,7 +50,7 @@ jobs:
 
       - name: Get Instance template name
         id: name
-        run: echo "template-name::${{ vars.INSTANCE_TEMPLATE_UPDATE }}-${{ steps.date.outputs.currentts }}" >> $GITHUB_OUTPUT
+        run: echo "template-name=${{ vars.INSTANCE_TEMPLATE_UPDATE }}-${{ steps.date.outputs.currentts }}" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v3
         name: Use Node.js ${{ matrix.node-version }}
