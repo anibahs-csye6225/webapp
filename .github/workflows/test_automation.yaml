@@ -46,6 +46,14 @@ jobs:
       INSTANCE_TEMPLATE_NAME: ${{vars.INSTANCE_TEMPLATE_UPDATE}}-$CURRENT_DATE
 
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Get Instance template name
+        id: name
+        run: echo "::set-output name=template-name::${{ vars.INSTANCE_TEMPLATE_UPDATE }}-${{ steps.date.outputs.date }}"
+
       - uses: actions/checkout@v3
         name: Use Node.js ${{ matrix.node-version }}
 
@@ -141,7 +149,7 @@ jobs:
           instance_template_name="${{env.INSTANCE_TEMPLATE_UPDATE}}-$current_date"
           echo "Instance template name: $instance_template_name"
 
-          gcloud beta compute instance-templates create $INSTANCE_TEMPLATE_UPDATE \
+          gcloud beta compute instance-templates create ${{ steps.date.outputs.template-name }} \
             --project=${{env.PROJECT_ID}} \
             --machine-type=e2-medium \
             --instance-template-region=${{env.REGION}} \
@@ -156,11 +164,11 @@ jobs:
 
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr \
-          --template=$INSTANCE_TEMPLATE_UPDATE --region=${{env.REGION}}
+          --template=${{ steps.date.outputs.template-name }} --region=${{env.REGION}}
 
       - name: Issue rolling update on instance group
         run: gcloud compute instance-groups managed rolling-action start-update mig-mgr \
-          --version=template=$INSTANCE_TEMPLATE_UPDATE --region=${{env.REGION}}
+          --version=template=${{ steps.date.outputs.template-name }} --region=${{env.REGION}}
       
       - name: Monitor updates
         run: gcloud compute instance-groups managed wait-until mig-mgr \
