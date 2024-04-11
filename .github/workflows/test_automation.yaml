@@ -42,7 +42,7 @@ jobs:
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
       LOGPATH: ${{ vars.LOGPATH }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
-      CURRENT_DATE: ${{ format('{MM-dd-HH-mm}', github.event.created_at) }}
+      CURRENT_DATE: ${{ format('{0:MM-dd-HH-mm}', github.event.created_at) }}
       INSTANCE_TEMPLATE_NAME: ${{vars.INSTANCE_TEMPLATE_UPDATE}}-$CURRENT_DATE
 
     steps:
