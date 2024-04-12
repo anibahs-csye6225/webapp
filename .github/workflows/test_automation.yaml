@@ -35,12 +35,12 @@ jobs:
       CLOUD_HOST: ${{ secrets.CLOUD_HOST }}      
       DIALECT: ${{ secrets.DIALECT }}
       DB_PORT: ${{ secrets.DB_PORT }}
+      LOGPATH: ${{ secrets.LOGPATH }}
       INSTANCE_TEMPLATE_UPDATE: ${{ vars.INSTANCE_TEMPLATE_UPDATE }}
       PROJECT_ID: ${{ vars.PROJECT_ID }}
       IMAGE_ID: ${{ vars.IMAGE_ID }}
       REGION: ${{ vars.REGION }}
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
-      LOGPATH: ${{ vars.LOGPATH }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
     steps:
@@ -150,7 +150,7 @@ jobs:
             --machine-type=e2-medium \
             --instance-template-region=${{env.REGION}} \
             --network-interface=network-tier=STANDARD,subnet=webapp-subnet \
-            --metadata=startup-script="#!/bin/bash\n\nset -e\nif [ -f \"/opt/webapp/.env\" ]; then\n  echo \"Env file exists:\"\n  sudo cat \"/opt/webapp/.env\"\nelse\n  # setup env file\n  sudo echo \"HOST=${{secrets.CLOUD_HOST}}\" > /opt/webapp/.env\n  sudo echo \"DATABASE=${{secrets.CLOUD_DATABASE}}\" >> /opt/webapp/.env\n  sudo echo \"USERNAME=${{secrets.CLOUD_USERNAME}}\" >> /opt/webapp/.env\n  sudo echo \"PASSWORD=${{secrets.CLOUD_PASSWORD}}\" >> /opt/webapp/.env\n  sudo echo \"DIALECT=${{secrets.PASSWORD}}\" >> /opt/webapp/.env\n  sudo echo \"DB_PORT=${{secrets.DB_PORT}}\" >> /opt/webapp/.env\n  sudo echo \"LOGPATH=${{env.LOGPATH}}\" >> /opt/webapp/.env\n  echo \"Env file generated\"\nfi\n\necho \"Restart ops agent\"\nsudo systemctl restart google-cloud-ops-agent\nsudo systemctl status google-cloud-ops-agent --no-pager\n\necho \"Setting up webapp service\"\nsudo cat /opt/webapp/packer/setup_service.sh\nsudo /opt/webapp/packer/setup_service.sh" \
+            --metadata=startup-script="#!/bin/bash\n\nset -e\nif [ -f \"/opt/webapp/.env\" ]; then\n  echo \"Env file exists:\"\n  sudo cat \"/opt/webapp/.env\"\nelse\n  # setup env file\n  sudo echo \"HOST=${{secrets.CLOUD_HOST}}\" > /opt/webapp/.env\n  sudo echo \"DATABASE=${{secrets.CLOUD_DATABASE}}\" >> /opt/webapp/.env\n  sudo echo \"USERNAME=${{secrets.CLOUD_USERNAME}}\" >> /opt/webapp/.env\n  sudo echo \"PASSWORD=${{secrets.CLOUD_PASSWORD}}\" >> /opt/webapp/.env\n  sudo echo \"DIALECT=${{secrets.PASSWORD}}\" >> /opt/webapp/.env\n  sudo echo \"DB_PORT=${{secrets.DB_PORT}}\" >> /opt/webapp/.env\n  sudo echo \"LOGPATH=${{secrets.LOGPATH}}\" >> /opt/webapp/.env\n  echo \"Env file generated\"\nfi\n\necho \"Restart ops agent\"\nsudo systemctl restart google-cloud-ops-agent\nsudo systemctl status google-cloud-ops-agent --no-pager\n\necho \"Setting up webapp service\"\nsudo cat /opt/webapp/packer/setup_service.sh\nsudo /opt/webapp/packer/setup_service.sh" \
             --service-account ${{env.SERVICE_ACCOUNT}}@${{env.PROJECT_ID}}.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.read \
             --region=${{env.REGION}} --tags=http-server \
