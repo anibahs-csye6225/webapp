@@ -155,7 +155,8 @@ jobs:
             --service-account ${{env.SERVICE_ACCOUNT}}@${{env.PROJECT_ID}}.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.read \
             --region=${{env.REGION}} --tags=http-server \
-            --create-disk=auto-delete=yes,device-name=webapp,image=projects/${{env.PROJECT_ID}}/global/images/${{steps.image.outputs.image-id}},size=100,type=pd-balanced          
+            --boot-disk-auto-delete=yes --boot-disk-device-name=webapp --boot-disk-size=100 --boot-disk-type=pd-balanced \
+            --image=projects/${{env.PROJECT_ID}}/global/images/${{steps.image.outputs.image-id}}      
   
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
