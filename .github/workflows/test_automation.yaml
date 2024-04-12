@@ -140,7 +140,7 @@ jobs:
         id: image
         working-directory: packer
         run: |
-          packer_output=$(packer build . | grep -oP "A disk image was created in the '$project_id' project: \K.*")
+          packer_output=$(packer build . | grep -oP "A disk image was created in the '${{env.PROJECT_ID}}' project: \K.*")
           echo "image-id=$packer_output" >> $GITHUB_OUTPUT
 
       - name: Create updated instance template
