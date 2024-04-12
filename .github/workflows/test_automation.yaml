@@ -158,8 +158,7 @@ jobs:
 
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template \
-          mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} \
-          --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
+          mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
 
       - name: Issue rolling update on instance group
         run: gcloud compute instance-groups managed rolling-action start-update mig-mgr \
