@@ -145,7 +145,7 @@ jobs:
 
       - name: Create updated instance template
         run: |
-          gcloud beta compute instance-templates create ${{ steps.image.outputs.template-name }} \
+          gcloud beta compute instance-templates create ${{ steps.name.outputs.template-name }} \
             --project=${{env.PROJECT_ID}} \
             --machine-type=e2-medium \
             --instance-template-region=${{env.REGION}} \
@@ -154,7 +154,7 @@ jobs:
             --service-account ${{env.SERVICE_ACCOUNT}}@${{env.PROJECT_ID}}.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.read \
             --region=${{env.REGION}} --tags=http-server \
-            --create-disk=auto-delete=yes,boot=yes,device-name=webapp,image=projects/${{env.PROJECT_ID}}/global/images/${{steps.name.outputs.image-id}},mode=rw,size=100,type=pd-balanced          
+            --create-disk=auto-delete=yes,boot=yes,device-name=webapp,image=projects/${{env.PROJECT_ID}}/global/images/${{steps.image.outputs.image-id}},mode=rw,size=100,type=pd-balanced          
   
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
