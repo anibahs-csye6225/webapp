@@ -84,7 +84,7 @@ jobs:
       - run: npm test
       
       - run: rm .env
-      - run: zip -r "${{ github.workspace}}/webapp.zip" "./../../webapp"
+      - run: zip -r "${{ github.workspace}}/webapp.zip" "./../webapp"
       - run: ls -lart "${{ github.workspace}}"
            
       # - uses: actions/upload-artifact@v4
