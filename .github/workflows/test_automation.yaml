@@ -61,36 +61,36 @@ jobs:
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
-  #     - name: create env file
-  #       run: |
-  #         touch .env
-  #         echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-  #         echo DATABASE=${{ secrets.DATABASE }} >> .env
-  #         echo USERNAME=${{ secrets.USERNAME }} >> .env
-  #         echo PASSWORD=${{ secrets.PASSWORD }} >> .env
-  #         echo HOST=${{ secrets.HOST }} >> .env
-  #         echo DIALECT=${{ secrets.DIALECT }} >> .env
+      - name: create env file
+        run: |
+          touch .env
+          echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+          echo DATABASE=${{ secrets.DATABASE }} >> .env
+          echo USERNAME=${{ secrets.USERNAME }} >> .env
+          echo PASSWORD=${{ secrets.PASSWORD }} >> .env
+          echo HOST=${{ secrets.HOST }} >> .env
+          echo DIALECT=${{ secrets.DIALECT }} >> .env
 
       
-  #     - run: pwd && ls -lart
-  #     - run: cd .. && pwd && ls -lart
+      - run: pwd && ls -lart
+      - run: cd .. && pwd && ls -lart
 
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'npm'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-  #     - run: npm install
-  #     - run: npm test
+      - run: npm install
+      - run: npm test
       
-  #     - run: rm .env
-  #     - run: zip -r "${{ github.workspace}}/webapp.zip" "./../webapp"
-  #     - run: ls -lart "${{ github.workspace}}"
+      - run: rm .env
+      - run: zip -r "${{ github.workspace}}/webapp.zip" "./../webapp"
+      - run: ls -lart "${{ github.workspace}}"
            
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: webapp
-  #         path: webapp.zip
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: webapp
+      #     path: webapp.zip
           
 
   # packer:
@@ -109,7 +109,7 @@ jobs:
   #       with:
   #         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
-  #     # - run: cp "${{ github.workspace}}/webapp.zip" .      
+  #    - run: cp "${{ github.workspace}}/webapp.zip" .      
       
   #     - name: Download a single artifact
   #       uses: actions/download-artifact@v4
@@ -117,29 +117,31 @@ jobs:
   #         name: webapp
   #         path: ..
           
-  #     - name: Setup packer
-  #       uses: hashicorp/setup-packer@main
-  #       with:
-  #         version: '1.8.3' 
+      - name: Setup packer
+        uses: hashicorp/setup-packer@main
+        with:
+          version: '1.8.3' 
 
-  #     - run: pwd && ls -lart
-  #     - run: cd .. && pwd && ls -lart
+      - run: pwd && ls -lart
+      - run: cd .. && pwd && ls -lart
 
-  #     - name: Initialize packer
-  #       working-directory: packer
-  #       run: packer init .
+      - name: Initialize packer
+        working-directory: packer
+        run: packer init .
         
-  #     - name: Format packer
-  #       working-directory: packer
-  #       run: packer fmt . 
+      - name: Format packer
+        working-directory: packer
+        run: packer fmt . 
         
-  #     - name: Validate packer
-  #       working-directory: packer
-  #       run: packer validate . 
+      - name: Validate packer
+        working-directory: packer
+        run: packer validate . 
  
-  #     - name: Run packer Build
-  #       working-directory: packer
-  #       run: packer build .
+      - name: Run packer Build
+        working-directory: packer
+        run: |
+          packer_output=$(packer build . | grep 'artifact' | awk '{print $2}')
+          echo "::set-output name=image-id::$packer_output"
 
       - name: Create updated instance template
         run: |
@@ -152,10 +154,8 @@ jobs:
             --service-account ${{env.SERVICE_ACCOUNT}}@${{env.PROJECT_ID}}.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.read \
             --region=${{env.REGION}} --tags=http-server \
-            --create-disk=auto-delete=yes,boot=yes,device-name=webapp,image=projects/${{env.PROJECT_ID}}/global/images/${{env.IMAGE_ID}},mode=rw,size=100,type=pd-balanced          
-        # --maintenance-policy=MIGRATE --provisioning-model=STANDARD \
-        # --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
-
+            --create-disk=auto-delete=yes,boot=yes,device-name=webapp,image=projects/${{env.PROJECT_ID}}/global/images/${{steps.name.outputs.image-id}},mode=rw,size=100,type=pd-balanced          
+  
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
 
