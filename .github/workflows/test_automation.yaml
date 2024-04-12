@@ -38,7 +38,6 @@ jobs:
       CLOUD_LOGPATH: ${{ secrets.CLOUD_LOGPATH }}
       INSTANCE_TEMPLATE_UPDATE: ${{ vars.INSTANCE_TEMPLATE_UPDATE }}
       PROJECT_ID: ${{ vars.PROJECT_ID }}
-      IMAGE_ID: ${{ vars.IMAGE_ID }}
       REGION: ${{ vars.REGION }}
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
@@ -141,7 +140,7 @@ jobs:
         working-directory: packer
         run: |
           packer_output=$(packer build . | grep 'artifact' | awk '{print $2}')
-          echo "::set-output name=image-id::$packer_output"
+          echo "image-id=$packer_output" >> $GITHUB_OUTPUT
 
       - name: Create updated instance template
         run: |
