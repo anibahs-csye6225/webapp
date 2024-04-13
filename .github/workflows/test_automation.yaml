@@ -150,6 +150,8 @@ jobs:
     # --instance-template-region=REGION
       - name: Create updated instance template
         run: |
+          echo "Instance template: ${{ steps.name.outputs.template-name }}""
+          echo "Image id: ${{steps.image.outputs.image-id}}"" 
           gcloud beta compute instance-templates create ${{ steps.name.outputs.template-name }} \
             --project=${{env.PROJECT_ID}} \
             --machine-type=e2-medium \
