@@ -132,8 +132,7 @@ jobs:
             --machine-type=e2-medium \
             --instance-template-region=${{env.REGION}} \
             --network-interface=network-tier=STANDARD,subnet=webapp-subnet,stack-type=IPV4_ONLY \
-            --metadata=startup-script=" \
-            #!/bin/bash \
+            --metadata=startup-script="#!/bin/bash \
             set -e \
             if [ -f '/opt/webapp/.env' ]; then \
               echo 'Env file exists:' \
@@ -147,7 +146,7 @@ jobs:
               sudo echo DIALECT=\"${{ secrets.DIALECT }}\" >> /opt/webapp/.env \
               sudo echo DB_PORT=\"${{ secrets.DB_PORT }}\" >> /opt/webapp/.env \
               sudo echo LOGPATH=\"/var/log/webapp/webapp.log\" >> /opt/webapp/.env \
-              echo "Env file generated" \
+              echo 'Env file generated' \
             fi \
 
             echo 'Restart ops agent' \
