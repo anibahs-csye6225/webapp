@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "currentts=$(date +'%m%d%H%M')" >> $GITHUB_OUTPUT
+        run: echo "currentts=$(date +'%m%d%H%M%S')" >> $GITHUB_OUTPUT
 
       - name: Get Instance template name
         id: name
@@ -143,7 +143,10 @@ jobs:
           packer_output=$(packer build . | grep -oP "A disk image was created in the '${{env.PROJECT_ID}}' project: \K.*")
           echo "image-id=$packer_output" >> $GITHUB_OUTPUT
 
-
+# gcloud compute instance-templates create INSTANCE_TEMPLATE_NAME \
+    # --source-instance=SOURCE_INSTANCE \
+    # --source-instance-zone=SOURCE_INSTANCE_ZONE \
+    # --instance-template-region=REGION
       - name: Create updated instance template
         run: |
           gcloud beta compute instance-templates create ${{ steps.name.outputs.template-name }} \
@@ -155,7 +158,8 @@ jobs:
             --service-account ${{env.SERVICE_ACCOUNT}}@${{env.PROJECT_ID}}.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.read \
             --region=${{env.REGION}} --tags=http-server \
-            --boot-disk-device-name=webapp --boot-disk-size=100 --boot-disk-type=pd-balanced --boot-disk-kms-key=vm-key \
+            --boot-disk-device-name=webapp --boot-disk-size=100 --boot-disk-type=pd-balanced \
+            --boot-disk-kms-key=projects/${{env.PROJECT_ID}}/locations/${{env.REGION}}/keyRings/keyring/cryptoKeys/vm-key \
             --image=projects/${{env.PROJECT_ID}}/global/images/${{steps.image.outputs.image-id}}      
   
       - name: Set updated instance template to instance group
