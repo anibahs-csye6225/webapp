@@ -41,6 +41,8 @@ jobs:
       REGION: ${{ vars.REGION }}
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+      PACKER_LOG: 1
+      PACKER_LOG_PATH: ${{ github.workspace }}/packer.log
 
     steps:
       - name: Get current date
@@ -140,10 +142,8 @@ jobs:
         id: image
         working-directory: packer
         run: |
-          echo "Project id used: ${{env.PROJECT_ID}}"
-          set -x
-          packer_output=$(packer build . 2>&1 | grep -oP "A disk image was created in the "${{env.PROJECT_ID}}" project: \K.*")
-          set +x
+          packer build . > packer_build_output.txt
+          packer_output=$(cat packer_build_output.txt | grep -oP "A disk image was created in the "${{env.PROJECT_ID}}" project: \K.*")
           echo "$packer_output"
           echo "image-id=$packer_output" >> $GITHUB_OUTPUT
 
@@ -176,7 +176,7 @@ jobs:
         run: gcloud compute instance-groups managed set-instance-template mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
 
       - name: Issue rolling update on instance group
-        run: gcloud compute instance-groups managed rolling-action start-update mig-mgr --version=template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region ${{env.REGION}}  --project=${{env.PROJECT_ID}}
+        run: gcloud compute instance-groups managed rolling-action start-update mig-mgr --version="template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }}" --region ${{env.REGION}} --project=${{env.PROJECT_ID}} --replacement-method=substitute
       
       - name: Monitor updates
         run: gcloud compute instance-groups managed wait-until mig-mgr --version-target-reached --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
