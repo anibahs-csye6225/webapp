@@ -68,7 +68,7 @@ build {
   #-------------------------------------# 
   
   post-processors {
-    post-processor "version_manifest" {
+    post-processor "manifest" {
       output     = "version_manifest.json"
       strip_path = true
     }
