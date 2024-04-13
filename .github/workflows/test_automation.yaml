@@ -134,10 +134,10 @@ jobs:
             --network-interface=network-tier=STANDARD,subnet=webapp-subnet,stack-type=IPV4_ONLY \
             --metadata=startup-script='#!/bin/bash \
             set -e \
-            if [ -f '/opt/webapp/.env' ]; \
+            if [ -f /opt/webapp/.env ]; \
             then \
-                echo 'Env file exists:' \
-                sudo cat '/opt/webapp/.env' \
+                echo Env file exists: \
+                sudo cat /opt/webapp/.env \
             else  \
                 sudo echo HOST='${{ secrets.CLOUD_HOST }}' > sudo tee /opt/webapp/.env \
                 sudo echo DATABASE='${{ secrets.CLOUD_DATABASE }}' >> sudo tee /opt/webapp/.env \
