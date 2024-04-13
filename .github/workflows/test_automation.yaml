@@ -135,26 +135,26 @@ jobs:
             --metadata=startup-script='\#\!/bin/bash \
             set -e \
             if [ -f /opt/webapp/.env ]; then \
-                echo Env file exists: \
-                sudo cat /opt/webapp/.env \
+                echo "Env file exists:" \
+                sudo cat "/opt/webapp/.env" \
             else  \
-                sudo echo HOST='${{ secrets.CLOUD_HOST }}' > sudo tee /opt/webapp/.env \
-                sudo echo DATABASE='${{ secrets.CLOUD_DATABASE }}' >> sudo tee /opt/webapp/.env \
-                sudo echo USERNAME='${{ secrets.CLOUD_USERNAME }}' >> sudo tee /opt/webapp/.env \
-                sudo echo PASSWORD='${{ secrets.CLOUD_PASSWORD }}' >> sudo tee /opt/webapp/.env \
-                sudo echo DIALECT='${{ secrets.DIALECT }}' >> sudo tee /opt/webapp/.env \
-                sudo echo DB_PORT='${{ secrets.DB_PORT }}' >> sudo tee /opt/webapp/.env \
-                sudo echo LOGPATH=/var/log/webapp/webapp.log >> sudo tee /opt/webapp/.env \
-                echo Env file generated \
+                sudo echo HOST='${{ secrets.CLOUD_HOST }}' > sudo tee "/opt/webapp/.env" \
+                sudo echo DATABASE='${{ secrets.CLOUD_DATABASE }}' >> sudo tee "/opt/webapp/.env" \
+                sudo echo USERNAME='${{ secrets.CLOUD_USERNAME }}' >> sudo tee "/opt/webapp/.env" \
+                sudo echo PASSWORD='${{ secrets.CLOUD_PASSWORD }}' >> sudo tee "/opt/webapp/.env" \
+                sudo echo DIALECT='${{ secrets.DIALECT }}' >> sudo tee "/opt/webapp/.env" \
+                sudo echo DB_PORT='${{ secrets.DB_PORT }}' >> sudo tee "/opt/webapp/.env" \
+                sudo echo LOGPATH=/var/log/webapp/webapp.log >> sudo tee "/opt/webapp/.env" \
+                echo "Env file generated" \
             fi \
 
-            echo Restart ops agent \
+            echo "Restart ops agent" \
             sudo systemctl restart google-cloud-ops-agent \
             sudo systemctl status google-cloud-ops-agent --no-pager \
 
-            echo Setting up webapp service \
-            sudo cat /opt/webapp/packer/setup_service.sh \
-            sudo /opt/webapp/packer/setup_service.sh' \
+            echo "Setting up webapp service" \
+            sudo cat "/opt/webapp/packer/setup_service.sh" \
+            sudo "/opt/webapp/packer/setup_service.sh"' \
             --service-account ${{env.SERVICE_ACCOUNT}}@${{env.PROJECT_ID}}.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.read \
             --region=${{env.REGION}} --tags=http-server \
