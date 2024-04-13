@@ -134,7 +134,7 @@ jobs:
             --network-interface=network-tier=STANDARD,subnet=webapp-subnet,stack-type=IPV4_ONLY \
             --metadata=startup-script='\#\!/bin/bash \
             set -e \
-            if [ -f /opt/webapp/.env ]; then \
+            if [ -f "/opt/webapp/.env" ]; then \
                 echo "Env file exists:" \
                 sudo cat "/opt/webapp/.env" \
             else  \
