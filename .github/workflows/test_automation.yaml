@@ -111,7 +111,7 @@ jobs:
       - name: Run packer Build
         working-directory: packer
         run: |
-          packer build . 2>&1 > packer_build_output.txt
+          packer build .
 
       - name: Extract Image ID from manifest
         working-directory: packer
