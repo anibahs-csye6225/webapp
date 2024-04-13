@@ -172,7 +172,7 @@ jobs:
             --region=${{env.REGION}} --tags=http-server \
             --boot-disk-device-name=webapp --boot-disk-size=100 --boot-disk-type=pd-balanced \
             --boot-disk-kms-key=projects/${{env.PROJECT_ID}}/locations/${{env.REGION}}/keyRings/keyring/cryptoKeys/vm-key \
-            --image=projects/${{env.PROJECT_ID}}/global/images/"${{$IMAGE_ID}}"      
+            --image="projects/${{env.PROJECT_ID}}/global/images/$IMAGE_ID"      
   
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
