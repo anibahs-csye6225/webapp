@@ -145,7 +145,7 @@ jobs:
 
       - name: Extract Image ID from manifest
         run: |
-          IMAGE_ID=$(jq -r '.builds[-1].artifact_id' manifest.json)
+          IMAGE_ID=$(jq -r '.builds[-1].artifact_id' version_manifest.json)
           echo "Image ID: $IMAGE_ID"
           echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV    
 
