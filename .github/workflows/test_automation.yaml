@@ -139,13 +139,13 @@ jobs:
               sudo cat '/opt/webapp/.env' \
             else  \
               # setup env file \
-              sudo echo HOST=\"${{ secrets.CLOUD_HOST}}}\" > /opt/webapp/.env \
-              sudo echo DATABASE=\"${{ secrets.CLOUD_DATABASE }}\" >> /opt/webapp/.env \
-              sudo echo USERNAME=\"${{ secrets.CLOUD_USERNAME }}\" >> /opt/webapp/.env \
-              sudo echo PASSWORD=\"${{ secrets.CLOUD_PASSWORD }}\" >> /opt/webapp/.env \
-              sudo echo DIALECT=\"${{ secrets.DIALECT }}\" >> /opt/webapp/.env \
-              sudo echo DB_PORT=\"${{ secrets.DB_PORT }}\" >> /opt/webapp/.env \
-              sudo echo LOGPATH=\"/var/log/webapp/webapp.log\" >> /opt/webapp/.env \
+              sudo echo HOST=${{ secrets.CLOUD_HOST }} > /opt/webapp/.env \
+              sudo echo DATABASE=${{ secrets.CLOUD_DATABASE }} >> /opt/webapp/.env \
+              sudo echo USERNAME=${{ secrets.CLOUD_USERNAME }} >> /opt/webapp/.env \
+              sudo echo PASSWORD=${{ secrets.CLOUD_PASSWORD }} >> /opt/webapp/.env \
+              sudo echo DIALECT=${{ secrets.DIALECT }} >> /opt/webapp/.env \
+              sudo echo DB_PORT=${{ secrets.DB_PORT }} >> /opt/webapp/.env \
+              sudo echo LOGPATH=/var/log/webapp/webapp.log >> /opt/webapp/.env \
               echo 'Env file generated' \
             fi \
 
