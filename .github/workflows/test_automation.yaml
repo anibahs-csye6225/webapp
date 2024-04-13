@@ -137,13 +137,13 @@ jobs:
             if [ -f "/opt/webapp/.env" ]; then 
                 echo "Env file exists:" 
             else  
-                echo "HOST=${{ secrets.CLOUD_HOST }}" | sudo tee "/opt/webapp/.env" 
-                echo "DATABASE=${{ secrets.CLOUD_DATABASE }}" >> sudo tee "/opt/webapp/.env" 
-                echo "USERNAME=${{ secrets.CLOUD_USERNAME }}" >> sudo tee "/opt/webapp/.env" 
-                echo "PASSWORD=${{ secrets.CLOUD_PASSWORD }}" >> sudo tee "/opt/webapp/.env" 
-                echo "DB_PORT=${{ secrets.DB_PORT }}" >> sudo tee "/opt/webapp/.env" 
-                echo "LOGPATH=/var/log/webapp/webapp.log" >> sudo tee "/opt/webapp/.env" 
-                echo "DIALECT=${{ secrets.DIALECT }}" >> sudo tee "/opt/webapp/.env" 
+                echo "HOST=${{ secrets.CLOUD_HOST }}" | sudo tee -a "/opt/webapp/.env" 
+                echo "DATABASE=${{ secrets.CLOUD_DATABASE }}" | sudo tee -a "/opt/webapp/.env" 
+                echo "USERNAME=${{ secrets.CLOUD_USERNAME }}" | sudo tee -a "/opt/webapp/.env" 
+                echo "PASSWORD=${{ secrets.CLOUD_PASSWORD }}" | sudo tee -a "/opt/webapp/.env" 
+                echo "DB_PORT=${{ secrets.DB_PORT }}" | sudo tee -a "/opt/webapp/.env" 
+                echo "LOGPATH=/var/log/webapp/webapp.log" | sudo tee -a "/opt/webapp/.env" 
+                echo "DIALECT=${{ secrets.DIALECT }}" | sudo tee -a "/opt/webapp/.env" 
                 echo "Env file generated" 
             fi 
 
