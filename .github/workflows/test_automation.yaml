@@ -155,8 +155,7 @@ jobs:
 
             echo 'Setting up webapp service' \
             sudo cat /opt/webapp/packer/setup_service.sh \
-            sudo /opt/webapp/packer/setup_service.sh \
-            EOT" \
+            sudo /opt/webapp/packer/setup_service.sh" \
             --service-account ${{env.SERVICE_ACCOUNT}}@${{env.PROJECT_ID}}.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.read \
             --region=${{env.REGION}} --tags=http-server \
