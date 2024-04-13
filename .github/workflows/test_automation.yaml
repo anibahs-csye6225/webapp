@@ -132,7 +132,7 @@ jobs:
             --machine-type=e2-medium \
             --instance-template-region=${{env.REGION}} \
             --network-interface=network-tier=STANDARD,subnet=webapp-subnet,stack-type=IPV4_ONLY \
-            --metadata=startup-script="#!/bin/bash \
+            --metadata=startup-script="\#!/bin/bash \
             set -e \
             if [ -f '/opt/webapp/.env' ]; then \
               echo 'Env file exists:' \
