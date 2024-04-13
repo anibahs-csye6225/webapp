@@ -136,7 +136,7 @@ jobs:
             #!/bin/bash \
             set -e \
             if [ -f '/opt/webapp/.env' ]; then \
-              echo "Env file exists:" \
+              echo 'Env file exists:' \
               sudo cat '/opt/webapp/.env' \
             else  \
               # setup env file \
