@@ -66,5 +66,11 @@ build {
     ]
   }
   #-------------------------------------# 
-
+  
+  post-processors {
+    post-processor "version_manifest" {
+      output     = "version_manifest.json"
+      strip_path = true
+    }
+  }
 }

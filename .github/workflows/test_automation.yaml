@@ -142,15 +142,12 @@ jobs:
         working-directory: packer
         run: |
           packer build . 2>&1 > packer_build_output.txt
-      
-      - name: Get image id
-        id: image
-        working-directory: packer
-        run: |
-          packer_output=$(cat packer_build_output.txt | grep -oP "A disk image was created in the "${{env.PROJECT_ID}}" project: \K.*")
-          echo "image-id=$packer_output" >> $GITHUB_OUTPUT
-          cat ${{ github.workspace }}/packer.log     
 
+      - name: Extract Image ID from manifest
+        run: |
+          IMAGE_ID=$(jq -r '.builds[-1].artifact_id' manifest.json)
+          echo "Image ID: $IMAGE_ID"
+          echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV    
 
 # gcloud compute instance-templates create INSTANCE_TEMPLATE_NAME \
     # --source-instance=SOURCE_INSTANCE \
@@ -160,7 +157,7 @@ jobs:
       - name: View input variables
         run: |
           echo "Instance template: ${{ steps.name.outputs.template-name }}"
-          echo "Image id: ${{steps.image.outputs.image-id}}"
+          echo "Image id: $IMAGE_ID"
 
       - name: Create updated instance template
         run: |
@@ -175,7 +172,7 @@ jobs:
             --region=${{env.REGION}} --tags=http-server \
             --boot-disk-device-name=webapp --boot-disk-size=100 --boot-disk-type=pd-balanced \
             --boot-disk-kms-key=projects/${{env.PROJECT_ID}}/locations/${{env.REGION}}/keyRings/keyring/cryptoKeys/vm-key \
-            --image=projects/${{env.PROJECT_ID}}/global/images/"${{steps.image.outputs.image-id}}"      
+            --image=projects/${{env.PROJECT_ID}}/global/images/"${{$IMAGE_ID}}"      
   
       - name: Set updated instance template to instance group
         run: gcloud compute instance-groups managed set-instance-template mig-mgr --template=projects/${{env.PROJECT_ID}}/regions/${{env.REGION}}/instanceTemplates/${{ steps.name.outputs.template-name }} --region=${{env.REGION}} --project=${{env.PROJECT_ID}}
