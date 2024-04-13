@@ -140,13 +140,13 @@ jobs:
               sudo cat '/opt/webapp/.env' \
             else  \
               # setup env file \
-              sudo echo \"HOST=${google_compute_address.endpoint_ip_addr.address}\" > /opt/webapp/.env \
-              sudo echo \"DATABASE=${google_sql_database.database.name}\" >> /opt/webapp/.env \
-              sudo echo \"USERNAME=${google_sql_user.db_user.name}\" >> /opt/webapp/.env \
-              sudo echo \"PASSWORD=${google_sql_user.db_user.password}\" >> /opt/webapp/.env \
-              sudo echo \"DIALECT=${var.db_dialect}\" >> /opt/webapp/.env \
-              sudo echo \"DB_PORT=${var.db_port}\" >> /opt/webapp/.env \
-              sudo echo \"LOGPATH=/var/log/webapp/webapp.log\" >> /opt/webapp/.env \
+              sudo echo HOST=\"${{ CLOUD_HOST}}}\" > /opt/webapp/.env \
+              sudo echo DATABASE=\"${{ CLOUD_DATABASE }}\" >> /opt/webapp/.env \
+              sudo echo USERNAME=\"${{ CLOUD_USERNAME }}\" >> /opt/webapp/.env \
+              sudo echo PASSWORD=\"${{ CLOUD_PASSWORD }}\" >> /opt/webapp/.env \
+              sudo echo DIALECT=\"${{ DIALECT }}\" >> /opt/webapp/.env \
+              sudo echo DB_PORT=\"${{ DB_PORT }}\" >> /opt/webapp/.env \
+              sudo echo LOGPATH=\"/var/log/webapp/webapp.log\" >> /opt/webapp/.env \
               echo "Env file generated" \
             fi \
 
