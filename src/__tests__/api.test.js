@@ -9,7 +9,7 @@ const fn = "Jane";
 const ln = "Doe"
 
 
-describe('v1/user API', () => {
+describe('v4/user API', () => {
     let server;
     const payload = {
         "first_name": fn,
@@ -51,14 +51,14 @@ describe('v1/user API', () => {
     //Test 1 - Create an account, and using the GET call, validate account exists.
     test('return user details on GET request after user creation', async () => {
         const createUserRes = await request(app)
-            .post('/v1/user')
+            .post('/v4/user')
             .auth(un, pd)
             .send(payload);
         expect(createUserRes.statusCode).toEqual(201);
 
 
         const getCreatedRes = await request(app)
-            .get('/v1/user/self')
+            .get('/v4/user/self')
             .set('Custom-Header', 'integrationTests') // Add custom header with string
             .auth(un, pd);
         expect(getCreatedRes.statusCode).toEqual(200);
@@ -80,13 +80,13 @@ describe('v1/user API', () => {
 
 
         const updateUser = await request(app)
-            .put('/v1/user/self')
+            .put('/v4/user/self')
             .auth(un, pd)
             .set('Custom-Header', 'integrationTests') // Add custom header with string
             .send(updatePayload);
 
         const getUpdatedRes = await request(app)
-            .get('/v1/user/self')
+            .get('/v4/user/self')
             .set('Custom-Header', 'integrationTests') // Add custom header with string
             .auth(un, pd);
 

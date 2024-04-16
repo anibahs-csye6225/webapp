@@ -28,7 +28,7 @@ app.use(express.json(), function(req, res, next) {
 app.use('/healthz', hc_router);
 
 //router for API Endpoints for authentication
-app.use('/v1/user', auth_router);
+app.use('/v4/user', auth_router);
 
 
 //function for all other Endpoints
